@@ -222,11 +222,11 @@
     tbody.innerHTML = data.map(c => `
       <tr>
         <td><strong>${c.name}</strong></td>
-        <td><span class="status-pill ${c.isActive ? 'pill-active' : 'pill-inactive'}">${c.isActive ? 'Active' : 'Inactive'}</span></td>
-        <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${new Date(c.createdAt).toLocaleDateString()}</td>
+        <td><span class="status-pill ${c.isactive ? 'pill-active' : 'pill-inactive'}">${c.isactive ? 'Active' : 'Inactive'}</span></td>
+        <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${new Date(c.createdat).toLocaleDateString()}</td>
         <td><div class="actions">
-          <button class="btn btn-edit" onclick="openEdit(${c.hiringCompanyId}, '${c.name}', ${c.isActive})">Edit</button>
-          <button class="btn btn-danger" onclick="deleteCompany(${c.hiringCompanyId})">Delete</button>
+          <button class="btn btn-edit" onclick="openEdit(${c.hiringcompanyid}, '${c.name}', ${c.isactive})">Edit</button>
+          <button class="btn btn-danger" onclick="deleteCompany(${c.hiringcompanyid})">Delete</button>
         </div></td>
       </tr>
     `).join('');
