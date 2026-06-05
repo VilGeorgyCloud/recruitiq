@@ -1,6 +1,5 @@
-# Copy this file to .env and fill in your values
-# On Railway, set these as environment variables in the dashboard
+[phases.build]
+cmds = ["npm install"]
 
-DATABASE_URL=postgresql://user:password@host:port/dbname
-NODE_ENV=development
-PORT=3000
+[start]
+cmd = "node server.js"
