@@ -267,7 +267,7 @@
         <td style="color:var(--muted)">${c.designation || '—'}</td>
         <td style="color:var(--muted)">${c.location || '—'}</td>
         <td style="color:var(--muted)">${c.recruitername || '—'}</td>
-        <td>${c.linkedinlink ? `<a class="td-link" href="${c.linkedinlink}" target="_blank">↗ LinkedIn</a>` : '—'}</td>
+        <td>${c.linkedinlink ? `<a class="td-link" href="${c.linkedinlink.startsWith('http') ? c.linkedinlink : 'https://' + c.linkedinlink}" target="_blank" rel="noopener noreferrer">View ↗</a>` : '—'}</td>
         <td style="color:var(--muted)">${c.referredfrom || '—'}</td>
         <td><div class="actions">
           <button class="btn btn-edit btn-sm" onclick="openEdit(${c.candidateid})">Edit</button>
