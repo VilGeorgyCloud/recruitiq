@@ -291,6 +291,7 @@
     const phone = document.getElementById('i-phone').value.trim();
     if (!name) return showToast('Name is required', 'error');
     if (!phone) return showToast('Phone is required', 'error');
+    const rid = document.getElementById('i-recruiter').value;
     const body = {
       name, phone,
       email: document.getElementById('i-email').value.trim() || null,
@@ -299,7 +300,7 @@
       location: document.getElementById('i-location').value.trim() || null,
       linkedinLink: document.getElementById('i-linkedin').value.trim() || null,
       referredFrom: document.getElementById('i-referred').value.trim() || null,
-      recruiterId: document.getElementById('i-recruiter').value || null,
+      recruiterId: rid ? parseInt(rid) : null,
     };
     try {
       const res = await fetch(`${API}/candidates`, {
@@ -331,6 +332,7 @@
   function closeModal() { document.getElementById('edit-modal').classList.remove('open'); editingId = null; }
 
   async function saveEdit() {
+    const erid = document.getElementById('e-recruiter').value;
     const body = {
       name: document.getElementById('e-name').value.trim(),
       phone: document.getElementById('e-phone').value.trim(),
@@ -340,7 +342,7 @@
       location: document.getElementById('e-location').value.trim() || null,
       linkedinLink: document.getElementById('e-linkedin').value.trim() || null,
       referredFrom: document.getElementById('e-referred').value.trim() || null,
-      recruiterId: document.getElementById('e-recruiter').value || null,
+      recruiterId: erid ? parseInt(erid) : null,
     };
     try {
       const res = await fetch(`${API}/candidates/${editingId}`, {
