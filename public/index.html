@@ -583,12 +583,18 @@
   }
 
   // Simulate stats (replace with fetch() calls to your API)
-  setTimeout(() => {
-    animateStat(document.getElementById('s-candidates'), 0);
-    animateStat(document.getElementById('s-entries'), 0);
-    animateStat(document.getElementById('s-roles'), 0);
-    animateStat(document.getElementById('s-companies'), 0);
-  }, 400);
+  fetch('/api/stats')
+  .then(res => res.json())
+  .then(data => {
+    animateStat(document.getElementById('s-candidates'), data.candidates);
+    animateStat(document.getElementById('s-entries'), data.entries);
+    animateStat(document.getElementById('s-roles'), data.roles);
+    animateStat(document.getElementById('s-companies'), data.companies);
+  })
+  .catch(() => {
+    ['s-candidates','s-entries','s-roles','s-companies']
+      .forEach(id => document.getElementById(id).textContent = '—');
+  });
 </script>
 
 </body>
