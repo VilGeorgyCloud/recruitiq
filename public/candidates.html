@@ -177,6 +177,7 @@
             <th>Location</th>
             <th>Recruiter</th>
             <th>LinkedIn</th>
+            <th>Referred From</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -245,7 +246,7 @@
   }
 
   function populateRecruiters() {
-    const opts = recruiters.map(r => `<option value="${r.recruiterId}">${r.name}</option>`).join('');
+    const opts = recruiters.map(r => `<option value="${r.recruiterid}">${r.name}</option>`).join('');
     document.getElementById('i-recruiter').innerHTML = '<option value="">— Select Recruiter —</option>' + opts;
     document.getElementById('e-recruiter').innerHTML = '<option value="">— Select Recruiter —</option>' + opts;
   }
@@ -254,7 +255,7 @@
     const tbody = document.getElementById('table-body');
     document.getElementById('count').textContent = `${data.length} candidate${data.length===1?'':'s'}`;
     if (!data.length) {
-      tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><p>No candidates yet — add one above.</p></div></td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><p>No candidates yet — add one above.</p></div></td></tr>`;
       return;
     }
     tbody.innerHTML = data.map(c => `
@@ -266,7 +267,8 @@
         <td style="color:var(--muted)">${c.designation || '—'}</td>
         <td style="color:var(--muted)">${c.location || '—'}</td>
         <td style="color:var(--muted)">${c.recruitername || '—'}</td>
-        <td>${c.linkedinlink ? `<a class="td-link" href="${c.linkedinlink}" target="_blank">View ↗</a>` : '—'}</td>
+        <td>${c.linkedinlink ? `<a class="td-link" href="${c.linkedinlink}" target="_blank">↗ LinkedIn</a>` : '—'}</td>
+        <td style="color:var(--muted)">${c.referredfrom || '—'}</td>
         <td><div class="actions">
           <button class="btn btn-edit btn-sm" onclick="openEdit(${c.candidateid})">Edit</button>
           <button class="btn btn-danger btn-sm" onclick="deleteCandidate(${c.candidateid})">Del</button>
