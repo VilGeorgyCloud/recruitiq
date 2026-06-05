@@ -262,14 +262,14 @@
         <td><strong>${c.name}</strong></td>
         <td class="td-mono">${c.phone || '—'}</td>
         <td class="td-mono">${c.email || '—'}</td>
-        <td>${c.currentCompany || '—'}</td>
+        <td>${c.currentcompany || '—'}</td>
         <td style="color:var(--muted)">${c.designation || '—'}</td>
         <td style="color:var(--muted)">${c.location || '—'}</td>
-        <td style="color:var(--muted)">${c.recruiterName || '—'}</td>
-        <td>${c.linkedinLink ? `<a class="td-link" href="${c.linkedinLink}" target="_blank">View ↗</a>` : '—'}</td>
+        <td style="color:var(--muted)">${c.recruitername || '—'}</td>
+        <td>${c.linkedinlink ? `<a class="td-link" href="${c.linkedinlink}" target="_blank">View ↗</a>` : '—'}</td>
         <td><div class="actions">
-          <button class="btn btn-edit btn-sm" onclick="openEdit(${c.candidateId})">Edit</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteCandidate(${c.candidateId})">Del</button>
+          <button class="btn btn-edit btn-sm" onclick="openEdit(${c.candidateid})">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteCandidate(${c.candidateid})">Del</button>
         </div></td>
       </tr>
     `).join('');
@@ -280,7 +280,7 @@
     render(candidates.filter(c =>
       (c.name||'').toLowerCase().includes(q) ||
       (c.email||'').toLowerCase().includes(q) ||
-      (c.currentCompany||'').toLowerCase().includes(q) ||
+      (c.currentcompany||'').toLowerCase().includes(q) ||
       (c.location||'').toLowerCase().includes(q) ||
       (c.designation||'').toLowerCase().includes(q)
     ));
@@ -315,18 +315,18 @@
   }
 
   function openEdit(id) {
-    const c = candidates.find(x => x.candidateId === id);
+    const c = candidates.find(x => x.candidateid === id);
     if (!c) return;
     editingId = id;
     document.getElementById('e-name').value = c.name || '';
     document.getElementById('e-phone').value = c.phone || '';
     document.getElementById('e-email').value = c.email || '';
-    document.getElementById('e-company').value = c.currentCompany || '';
+    document.getElementById('e-company').value = c.currentcompany || '';
     document.getElementById('e-designation').value = c.designation || '';
     document.getElementById('e-location').value = c.location || '';
-    document.getElementById('e-linkedin').value = c.linkedinLink || '';
-    document.getElementById('e-referred').value = c.referredFrom || '';
-    document.getElementById('e-recruiter').value = c.recruiterId || '';
+    document.getElementById('e-linkedin').value = c.linkedinlink || '';
+    document.getElementById('e-referred').value = c.referredfrom || '';
+    document.getElementById('e-recruiter').value = c.recruiterid || '';
     document.getElementById('edit-modal').classList.add('open');
   }
   function closeModal() { document.getElementById('edit-modal').classList.remove('open'); editingId = null; }
