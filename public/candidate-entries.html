@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candidate Entries — RecruitIQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0b0c0f; --surface: #13151a; --border: #1e2028; --border2: #2a2d38;
+    --accent: #4f6ef7; --accent2: #c8b8ff; --gold: #f0c060; --green: #3ecf8e;
+    --red: #f26a6a; --text: #e8eaf0; --muted: #6b7080;
+    --mono: 'DM Mono', monospace; --display: 'Syne', sans-serif; --body: 'DM Sans', sans-serif;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--body); min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px; opacity: 0.4; pointer-events: none; z-index: 0;
+  }
+  .orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; opacity: 0.15; }
+  .orb-1 { width: 500px; height: 500px; background: var(--accent); top: -200px; right: -100px; }
+  .orb-2 { width: 300px; height: 300px; background: var(--green); bottom: -100px; left: -100px; }
+
+  nav { position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); background: rgba(11,12,15,0.85); backdrop-filter: blur(12px); }
+  .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family: var(--display); font-size: 18px; font-weight: 800; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+  .logo-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+  .nav-back { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--border2); padding: 4px 12px; border-radius: 4px; text-decoration: none; transition: color 0.2s, border-color 0.2s; }
+  .nav-back:hover { color: var(--text); border-color: var(--accent); }
+
+  .wrapper { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  .page-header { padding: 48px 0 36px; animation: fadeUp 0.6s ease both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  .page-label { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .page-label::before { content: ''; display: block; width: 20px; height: 1px; background: var(--accent); }
+  .page-title { font-family: var(--display); font-size: 36px; font-weight: 800; letter-spacing: -1px; }
+  .page-sub { font-size: 14px; color: var(--muted); margin-top: 6px; font-weight: 300; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 28px; width: fit-content; animation: fadeUp 0.6s 0.05s ease both; }
+  .tab { font-family: var(--mono); font-size: 12px; padding: 10px 24px; cursor: pointer; color: var(--muted); background: var(--surface); border: none; border-right: 1px solid var(--border); transition: all 0.2s; letter-spacing: 0.5px; }
+  .tab:last-child { border-right: none; }
+  .tab.active { background: var(--accent); color: #fff; }
+  .tab:hover:not(.active) { color: var(--text); background: var(--border); }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* FORM */
+  .add-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; animation: fadeUp 0.6s 0.1s ease both; }
+  .section-title { font-family: var(--display); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 24px 0 14px; display: flex; align-items: center; gap: 8px; }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .section-title:first-child { margin-top: 0; }
+  .form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; }
+  .form-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
+  .form-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 12px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-family: var(--mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .field input, .field select, .field textarea {
+    background: var(--bg); border: 1px solid var(--border2); border-radius: 8px;
+    color: var(--text); font-family: var(--body); font-size: 14px;
+    padding: 10px 14px; outline: none; transition: border-color 0.2s; width: 100%;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
+  .field select option { background: var(--surface); }
+  .field textarea { resize: vertical; min-height: 80px; }
+  .form-actions { display: flex; justify-content: flex-end; margin-top: 20px; gap: 8px; }
+
+  .btn { font-family: var(--mono); font-size: 12px; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px; }
+  .btn-primary { background: var(--accent); color: #fff; font-weight: 500; }
+  .btn-primary:hover { filter: brightness(1.15); transform: translateY(-1px); }
+  .btn-secondary { background: transparent; border: 1px solid var(--border2); color: var(--muted); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-danger { background: transparent; border: 1px solid var(--border2); color: var(--red); }
+  .btn-danger:hover { border-color: var(--red); background: color-mix(in srgb, var(--red) 8%, transparent); }
+  .btn-edit { background: transparent; border: 1px solid var(--border2); color: var(--muted); }
+  .btn-edit:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm { padding: 6px 12px; font-size: 11px; }
+
+  /* TABLE */
+  .table-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; animation: fadeUp 0.6s 0.1s ease both; }
+  .table-top { padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); gap: 12px; flex-wrap: wrap; }
+  .table-top h3 { font-family: var(--display); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .count-badge { font-family: var(--mono); font-size: 11px; background: var(--bg); border: 1px solid var(--border2); color: var(--muted); padding: 3px 10px; border-radius: 20px; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; padding: 12px 24px; border-bottom: 1px solid var(--border); }
+  .filters input, .filters select { background: var(--bg); border: 1px solid var(--border2); border-radius: 6px; color: var(--text); font-family: var(--mono); font-size: 11px; padding: 6px 12px; outline: none; transition: border-color 0.2s; }
+  .filters input:focus, .filters select:focus { border-color: var(--accent); }
+  .filters input::placeholder { color: var(--muted); }
+  .filters select option { background: var(--surface); }
+
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 1400px; }
+  thead th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: color-mix(in srgb, var(--accent) 3%, transparent); }
+  tbody td { padding: 12px 14px; font-size: 12px; vertical-align: middle; }
+  .td-mono { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .td-link { color: var(--accent); font-family: var(--mono); font-size: 11px; text-decoration: none; }
+  .td-link:hover { text-decoration: underline; }
+
+  .status-pill { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 20px; border: 1px solid var(--border2); color: var(--muted); white-space: nowrap; display: inline-block; }
+  .actions { display: flex; gap: 4px; }
+  .empty-state { padding: 64px 24px; text-align: center; }
+  .empty-state p { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; display: none; align-items: flex-start; justify-content: center; backdrop-filter: blur(4px); padding: 24px; overflow-y: auto; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 28px; width: 100%; max-width: 800px; animation: fadeUp 0.25s ease; margin: auto; }
+  .modal h3 { font-family: var(--display); font-size: 20px; font-weight: 700; margin-bottom: 24px; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 24px; }
+
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 12px 20px; font-family: var(--mono); font-size: 12px; color: var(--text); z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.3s; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-color: var(--green); color: var(--green); }
+  .toast.error { border-color: var(--red); color: var(--red); }
+
+  footer { margin-top: 80px; border-top: 1px solid var(--border); padding: 24px 0; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; }
+  .footer-inner p { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+  @media(max-width:768px) { .form-grid,.form-grid-3,.form-grid-2{grid-template-columns:1fr} .wrapper{padding:0 16px} }
+</style>
+</head>
+<body>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><span class="logo-dot"></span>RecruitIQ</a>
+    <a href="index.html" class="nav-back">← Home</a>
+  </div>
+</nav>
+
+<div class="wrapper">
+  <div class="page-header">
+    <div class="page-label">Submissions</div>
+    <h1 class="page-title">Candidate Entries</h1>
+    <p class="page-sub">View all submissions and add new candidate entries.</p>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('view')">📋 View All</button>
+    <button class="tab" onclick="switchTab('add')">➕ Add Entry</button>
+  </div>
+
+  <!-- VIEW PANEL -->
+  <div class="panel active" id="panel-view">
+    <div class="table-panel">
+      <div class="table-top">
+        <h3>All Entries</h3>
+        <span class="count-badge" id="count">0 entries</span>
+      </div>
+      <div class="filters">
+        <input type="text" id="search" placeholder="Search candidate, company, role..." oninput="filterEntries()" style="flex:1;min-width:200px" />
+        <select id="filter-status" onchange="filterEntries()"><option value="">All Statuses</option></select>
+        <select id="filter-company" onchange="filterEntries()"><option value="">All Companies</option></select>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Candidate</th>
+              <th>Role</th>
+              <th>Company</th>
+              <th>Status</th>
+              <th>Recruiter</th>
+              <th>Total Exp</th>
+              <th>CTC</th>
+              <th>ECTC</th>
+              <th>NP (days)</th>
+              <th>CV Date</th>
+              <th>CV Link</th>
+              <th>R1</th>
+              <th>R2</th>
+              <th>R3</th>
+              <th>Final</th>
+              <th>Score</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <tr><td colspan="18"><div class="empty-state"><p>Loading...</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD PANEL -->
+  <div class="panel" id="panel-add">
+    <div class="add-panel">
+      <div class="section-title">Candidate & Role</div>
+      <div class="form-grid">
+        <div class="field"><label>Candidate *</label><select id="a-candidate"><option value="">— Select —</option></select></div>
+        <div class="field"><label>Company *</label><select id="a-company" onchange="loadRoles()"><option value="">— Select —</option></select></div>
+        <div class="field"><label>Role *</label><select id="a-role"><option value="">— Select Company First —</option></select></div>
+        <div class="field"><label>Status *</label><select id="a-status"><option value="">— Select —</option></select></div>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>Recruiter</label><select id="a-recruiter"><option value="">— Select —</option></select></div>
+        <div class="field"><label>Total Experience (yrs)</label><input type="number" step="0.5" id="a-exp" placeholder="e.g. 5.5" /></div>
+        <div class="field"><label>CTC</label><input type="text" id="a-ctc" placeholder="e.g. 12 LPA" /></div>
+        <div class="field"><label>ECTC</label><input type="text" id="a-ectc" placeholder="e.g. 18 LPA" /></div>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>NP (days)</label><input type="number" id="a-np" placeholder="e.g. 30" /></div>
+        <div class="field"><label>CV Link</label><input type="url" id="a-cvlink" placeholder="https://..." /></div>
+        <div class="field"><label>CV Date</label><input type="date" id="a-cvdate" /></div>
+        <div class="field"><label>Total Score</label><input type="number" id="a-score" placeholder="e.g. 8" /></div>
+      </div>
+
+      <div class="section-title">Interview Rounds</div>
+      <div class="form-grid-3">
+        <div class="field"><label>R1 Date & Time</label><input type="datetime-local" id="a-r1date" /></div>
+        <div class="field"><label>R1 Feedback</label><input type="text" id="a-r1fb" placeholder="Cleared / Rejected..." /></div>
+        <div class="field"></div>
+        <div class="field"><label>R2 Date & Time</label><input type="datetime-local" id="a-r2date" /></div>
+        <div class="field"><label>R2 Feedback</label><input type="text" id="a-r2fb" placeholder="Cleared / Rejected..." /></div>
+        <div class="field"></div>
+        <div class="field"><label>R3 Date & Time</label><input type="datetime-local" id="a-r3date" /></div>
+        <div class="field"><label>R3 Feedback</label><input type="text" id="a-r3fb" placeholder="Cleared / Rejected..." /></div>
+        <div class="field"></div>
+        <div class="field"><label>Final Interview</label><input type="datetime-local" id="a-final" /></div>
+        <div class="field"><label>Final Feedback</label><input type="text" id="a-finalfb" placeholder="Offer / Rejected..." /></div>
+        <div class="field"></div>
+      </div>
+
+      <div class="section-title">Notes</div>
+      <div class="field">
+        <label>Recruiter Notes</label>
+        <textarea id="a-notes" placeholder="Any notes about this candidate..."></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
+        <button class="btn btn-primary" onclick="addEntry()">+ Add Entry</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <h3>Edit Entry</h3>
+    <div class="form-grid">
+      <div class="field"><label>Status</label><select id="e-status"><option value="">— Select —</option></select></div>
+      <div class="field"><label>Recruiter</label><select id="e-recruiter"><option value="">— Select —</option></select></div>
+      <div class="field"><label>Total Experience</label><input type="number" step="0.5" id="e-exp" /></div>
+      <div class="field"><label>CTC</label><input type="text" id="e-ctc" /></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>ECTC</label><input type="text" id="e-ectc" /></div>
+      <div class="field"><label>NP (days)</label><input type="number" id="e-np" /></div>
+      <div class="field"><label>CV Link</label><input type="url" id="e-cvlink" /></div>
+      <div class="field"><label>CV Date</label><input type="date" id="e-cvdate" /></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Score</label><input type="number" id="e-score" /></div>
+      <div class="field"><label>R1 DateTime</label><input type="datetime-local" id="e-r1date" /></div>
+      <div class="field"><label>R1 Feedback</label><input type="text" id="e-r1fb" /></div>
+      <div class="field"><label>R2 DateTime</label><input type="datetime-local" id="e-r2date" /></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>R2 Feedback</label><input type="text" id="e-r2fb" /></div>
+      <div class="field"><label>R3 DateTime</label><input type="datetime-local" id="e-r3date" /></div>
+      <div class="field"><label>R3 Feedback</label><input type="text" id="e-r3fb" /></div>
+      <div class="field"><label>Final Interview</label><input type="datetime-local" id="e-final" /></div>
+    </div>
+    <div class="form-grid-2">
+      <div class="field"><label>Final Feedback</label><input type="text" id="e-finalfb" /></div>
+      <div class="field"><label>Recruiter Notes</label><input type="text" id="e-notes" /></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-edit" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <div class="footer-inner">
+    <p>RecruitIQ · 10xDeveloper.tech</p>
+    <p>candidateentry table</p>
+  </div>
+</footer>
+
+<script>
+  const API = '/api';
+  let entries = [], candidates = [], companies = [], roles = [], statuses = [], recruiters = [];
+  let editingId = null;
+  let allRoles = [];
+
+  // ── TABS ──
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // ── LOAD ALL DATA ──
+  async function load() {
+    try {
+      const [eRes, cRes, coRes, rRes, sRes, recRes] = await Promise.all([
+        fetch(`${API}/entries`),
+        fetch(`${API}/candidates`),
+        fetch(`${API}/companies`),
+        fetch(`${API}/roles`),
+        fetch(`${API}/statuses`),
+        fetch(`${API}/recruiters`),
+      ]);
+      entries   = await eRes.json();
+      candidates = await cRes.json();
+      companies  = await coRes.json();
+      allRoles   = await rRes.json();
+      statuses   = await sRes.json();
+      recruiters = await recRes.json();
+
+      populateDropdowns();
+      populateFilters();
+      renderEntries(entries);
+    } catch(e) { showToast('Failed to load data', 'error'); }
+  }
+
+  function populateDropdowns() {
+    // candidates
+    const cOpts = candidates.map(c => `<option value="${c.candidateid}">${c.name}</option>`).join('');
+    document.getElementById('a-candidate').innerHTML = '<option value="">— Select Candidate —</option>' + cOpts;
+
+    // companies
+    const coOpts = companies.map(c => `<option value="${c.hiringcompanyid}">${c.name}</option>`).join('');
+    document.getElementById('a-company').innerHTML = '<option value="">— Select Company —</option>' + coOpts;
+
+    // statuses
+    const sOpts = statuses.map(s => `<option value="${s.statusid}">${s.name}</option>`).join('');
+    const sOptsAll = '<option value="">— Select Status —</option>' + sOpts;
+    document.getElementById('a-status').innerHTML = sOptsAll;
+    document.getElementById('e-status').innerHTML = sOptsAll;
+
+    // recruiters
+    const rOpts = recruiters.map(r => `<option value="${r.recruiterid}">${r.name}</option>`).join('');
+    const rOptsAll = '<option value="">— None —</option>' + rOpts;
+    document.getElementById('a-recruiter').innerHTML = rOptsAll;
+    document.getElementById('e-recruiter').innerHTML = rOptsAll;
+  }
+
+  function loadRoles() {
+    const companyId = parseInt(document.getElementById('a-company').value);
+    const filtered = allRoles.filter(r => r.hiringcompanyid === companyId);
+    const opts = filtered.map(r => `<option value="${r.roleid}">${r.name}</option>`).join('');
+    document.getElementById('a-role').innerHTML = opts.length
+      ? '<option value="">— Select Role —</option>' + opts
+      : '<option value="">No roles for this company</option>';
+  }
+
+  function populateFilters() {
+    const sOpts = statuses.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+    document.getElementById('filter-status').innerHTML = '<option value="">All Statuses</option>' + sOpts;
+    const coOpts = companies.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+    document.getElementById('filter-company').innerHTML = '<option value="">All Companies</option>' + coOpts;
+  }
+
+  // ── RENDER TABLE ──
+  function renderEntries(data) {
+    const tbody = document.getElementById('table-body');
+    document.getElementById('count').textContent = `${data.length} entr${data.length===1?'y':'ies'}`;
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="18"><div class="empty-state"><p>No entries yet.</p></div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map(e => `
+      <tr>
+        <td><strong>${e.candidatename || '—'}</strong></td>
+        <td>${e.rolename || '—'}</td>
+        <td>${e.companyname || '—'}</td>
+        <td><span class="status-pill">${e.statusname || '—'}</span></td>
+        <td style="color:var(--muted)">${e.recruitername || '—'}</td>
+        <td class="td-mono">${e.totalexperience != null ? e.totalexperience + ' yrs' : '—'}</td>
+        <td class="td-mono">${e.ctc || '—'}</td>
+        <td class="td-mono">${e.ectc || '—'}</td>
+        <td class="td-mono">${e.nodays != null ? e.nodays + 'd' : '—'}</td>
+        <td class="td-mono">${e.cvdate ? new Date(e.cvdate).toLocaleDateString() : '—'}</td>
+        <td>${e.cvlink ? `<a class="td-link" href="${e.cvlink.startsWith('http') ? e.cvlink : 'https://'+e.cvlink}" target="_blank" rel="noopener">View ↗</a>` : '—'}</td>
+        <td class="td-mono">${e.r1datetime ? new Date(e.r1datetime).toLocaleDateString() : '—'}</td>
+        <td class="td-mono">${e.r2datetime ? new Date(e.r2datetime).toLocaleDateString() : '—'}</td>
+        <td class="td-mono">${e.r3datetime ? new Date(e.r3datetime).toLocaleDateString() : '—'}</td>
+        <td class="td-mono">${e.finalinterview ? new Date(e.finalinterview).toLocaleDateString() : '—'}</td>
+        <td class="td-mono">${e.totalscore != null ? e.totalscore : '—'}</td>
+        <td style="color:var(--muted);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.recruiternotes||''}">${e.recruiternotes || '—'}</td>
+        <td><div class="actions">
+          <button class="btn btn-edit btn-sm" onclick="openEdit(${e.candidateentryid})">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteEntry(${e.candidateentryid})">Del</button>
+        </div></td>
+      </tr>
+    `).join('');
+  }
+
+  function filterEntries() {
+    const q = document.getElementById('search').value.toLowerCase();
+    const fs = document.getElementById('filter-status').value;
+    const fc = document.getElementById('filter-company').value;
+    renderEntries(entries.filter(e =>
+      (!q || (e.candidatename||'').toLowerCase().includes(q) || (e.rolename||'').toLowerCase().includes(q) || (e.companyname||'').toLowerCase().includes(q)) &&
+      (!fs || e.statusname === fs) &&
+      (!fc || e.companyname === fc)
+    ));
+  }
+
+  // ── ADD ENTRY ──
+  function g(id) { return document.getElementById(id).value.trim() || null; }
+  function gi(id) { const v = document.getElementById(id).value; return v ? parseInt(v) : null; }
+  function gf(id) { const v = document.getElementById(id).value; return v ? parseFloat(v) : null; }
+
+  async function addEntry() {
+    const candidateId = gi('a-candidate');
+    const roleId      = gi('a-role');
+    const statusId    = gi('a-status');
+    if (!candidateId) return showToast('Please select a candidate', 'error');
+    if (!roleId)      return showToast('Please select a role', 'error');
+    if (!statusId)    return showToast('Please select a status', 'error');
+    const body = {
+      candidateId, roleId, statusId,
+      recruiterId:     gi('a-recruiter'),
+      totalExperience: gf('a-exp'),
+      ctc:  g('a-ctc'), ectc: g('a-ectc'),
+      noDays:   gi('a-np'),
+      cvLink:   g('a-cvlink'),
+      cvDate:   g('a-cvdate'),
+      totalScore: gi('a-score'),
+      recruiterNotes: g('a-notes'),
+      r1Datetime: g('a-r1date'), r1Feedback: g('a-r1fb'),
+      r2Datetime: g('a-r2date'), r2Feedback: g('a-r2fb'),
+      r3Datetime: g('a-r3date'), r3Feedback: g('a-r3fb'),
+      finalInterview: g('a-final'), finalFeedback: g('a-finalfb'),
+    };
+    try {
+      const res = await fetch(`${API}/entries`, {
+        method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+      });
+      if (!res.ok) { const err = await res.json(); throw new Error(err.error); }
+      showToast('Entry added!', 'success');
+      clearForm();
+      switchTabById('view');
+      load();
+    } catch(e) { showToast(e.message, 'error'); }
+  }
+
+  function clearForm() {
+    ['a-candidate','a-company','a-role','a-status','a-recruiter','a-exp','a-ctc','a-ectc',
+     'a-np','a-cvlink','a-cvdate','a-score','a-notes',
+     'a-r1date','a-r1fb','a-r2date','a-r2fb','a-r3date','a-r3fb','a-final','a-finalfb']
+      .forEach(id => document.getElementById(id).value = '');
+  }
+
+  function switchTabById(tab) {
+    document.querySelectorAll('.tab').forEach((t,i) => {
+      const match = (tab === 'view' && i === 0) || (tab === 'add' && i === 1);
+      t.classList.toggle('active', match);
+    });
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+  }
+
+  // ── EDIT ──
+  function toDatetimeLocal(val) {
+    if (!val) return '';
+    return new Date(val).toISOString().slice(0,16);
+  }
+  function toDateLocal(val) {
+    if (!val) return '';
+    return new Date(val).toISOString().slice(0,10);
+  }
+
+  function openEdit(id) {
+    const e = entries.find(x => x.candidateentryid === id);
+    if (!e) return;
+    editingId = id;
+    document.getElementById('e-status').value  = e.statusid || '';
+    document.getElementById('e-recruiter').value = e.recruiterid || '';
+    document.getElementById('e-exp').value     = e.totalexperience || '';
+    document.getElementById('e-ctc').value     = e.ctc || '';
+    document.getElementById('e-ectc').value    = e.ectc || '';
+    document.getElementById('e-np').value      = e.nodays || '';
+    document.getElementById('e-cvlink').value  = e.cvlink || '';
+    document.getElementById('e-cvdate').value  = toDateLocal(e.cvdate);
+    document.getElementById('e-score').value   = e.totalscore || '';
+    document.getElementById('e-r1date').value  = toDatetimeLocal(e.r1datetime);
+    document.getElementById('e-r1fb').value    = e.r1feedback || '';
+    document.getElementById('e-r2date').value  = toDatetimeLocal(e.r2datetime);
+    document.getElementById('e-r2fb').value    = e.r2feedback || '';
+    document.getElementById('e-r3date').value  = toDatetimeLocal(e.r3datetime);
+    document.getElementById('e-r3fb').value    = e.r3feedback || '';
+    document.getElementById('e-final').value   = toDatetimeLocal(e.finalinterview);
+    document.getElementById('e-finalfb').value = e.finalfeedback || '';
+    document.getElementById('e-notes').value   = e.recruiternotes || '';
+    document.getElementById('edit-modal').classList.add('open');
+  }
+
+  function closeModal() { document.getElementById('edit-modal').classList.remove('open'); editingId = null; }
+
+  async function saveEdit() {
+    const body = {
+      statusId:    gi('e-status'),
+      recruiterId: gi('e-recruiter'),
+      totalExperience: gf('e-exp'),
+      ctc: g('e-ctc'), ectc: g('e-ectc'),
+      noDays: gi('e-np'),
+      cvLink: g('e-cvlink'), cvDate: g('e-cvdate'),
+      totalScore: gi('e-score'),
+      recruiterNotes: g('e-notes'),
+      r1Datetime: g('e-r1date'), r1Feedback: g('e-r1fb'),
+      r2Datetime: g('e-r2date'), r2Feedback: g('e-r2fb'),
+      r3Datetime: g('e-r3date'), r3Feedback: g('e-r3fb'),
+      finalInterview: g('e-final'), finalFeedback: g('e-finalfb'),
+    };
+    try {
+      const res = await fetch(`${API}/entries/${editingId}`, {
+        method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+      });
+      if (!res.ok) { const err = await res.json(); throw new Error(err.error); }
+      closeModal();
+      showToast('Entry updated!', 'success');
+      load();
+    } catch(e) { showToast(e.message, 'error'); }
+  }
+
+  async function deleteEntry(id) {
+    if (!confirm('Delete this entry? This cannot be undone.')) return;
+    try {
+      await fetch(`${API}/entries/${id}`, { method: 'DELETE' });
+      showToast('Entry deleted', 'success');
+      load();
+    } catch(e) { showToast(e.message, 'error'); }
+  }
+
+  function showToast(msg, type='success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  load();
+</script>
+</body>
+</html>
