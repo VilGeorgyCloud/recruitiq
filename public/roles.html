@@ -5,136 +5,113 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Roles — RecruitIQ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #0b0c0f; --surface: #13151a; --border: #1e2028; --border2: #2a2d38;
-    --accent: #4f6ef7; --gold: #f0c060; --green: #3ecf8e; --red: #f26a6a;
-    --text: #e8eaf0; --muted: #6b7080;
-    --mono: 'DM Mono', monospace; --display: 'Syne', sans-serif; --body: 'DM Sans', sans-serif;
+    --bg: #f8f9fc; --surface: #ffffff; --border: #e5e7ef; --border2: #d0d3e0;
+    --accent: #4f6ef7; --green: #18a066; --red: #d94f4f; --gold: #d4920a;
+    --text: #1a1d2e; --muted: #7b8099;
+    --body: 'Poppins', sans-serif; --mono: 'DM Mono', monospace;
   }
-  body { background: var(--bg); color: var(--text); font-family: var(--body); min-height: 100vh; overflow-x: hidden; }
-  body::before {
-    content: ''; position: fixed; inset: 0;
-    background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 48px 48px; opacity: 0.4; pointer-events: none; z-index: 0;
-  }
-  .orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; opacity: 0.15; }
-  .orb-1 { width: 500px; height: 500px; background: var(--red); top: -200px; right: -100px; }
-  .orb-2 { width: 300px; height: 300px; background: var(--accent); bottom: -100px; left: -100px; }
+  body { background: var(--bg); color: var(--text); font-family: var(--body); min-height: 100vh; }
 
-  nav { position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); background: rgba(11,12,15,0.85); backdrop-filter: blur(12px); }
-  .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
-  .logo { font-family: var(--display); font-size: 18px; font-weight: 800; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 8px; }
-  .logo-dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; box-shadow: 0 0 10px var(--red); animation: pulse 2s ease-in-out infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
-  .nav-back { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--border2); padding: 4px 12px; border-radius: 4px; text-decoration: none; transition: color 0.2s, border-color 0.2s; }
-  .nav-back:hover { color: var(--text); border-color: var(--red); }
+  nav { position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.92); backdrop-filter: blur(10px); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 52px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family: var(--body); font-size: 16px; font-weight: 700; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+  .logo-dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; }
+  .nav-back { font-family: var(--mono); font-size: 10px; color: var(--muted); border: 1px solid var(--border2); padding: 4px 10px; border-radius: 4px; text-decoration: none; transition: color 0.2s, border-color 0.2s; }
+  .nav-back:hover { color: var(--accent); border-color: var(--accent); }
 
-  .wrapper { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 32px; }
-  .page-header { padding: 48px 0 36px; animation: fadeUp 0.6s ease both; }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-  .page-label { font-family: var(--mono); font-size: 11px; color: var(--red); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-  .page-label::before { content: ''; display: block; width: 20px; height: 1px; background: var(--red); }
-  .page-title { font-family: var(--display); font-size: 36px; font-weight: 800; letter-spacing: -1px; }
-  .page-sub { font-size: 14px; color: var(--muted); margin-top: 6px; font-weight: 300; }
+  .wrapper { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+  .page-header { padding: 20px 0 16px; }
+  .page-label { font-family: var(--mono); font-size: 10px; color: var(--red); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .page-title { font-size: 18px; font-weight: 600; }
 
-  .add-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 32px; animation: fadeUp 0.6s 0.1s ease both; }
-  .panel-title { font-family: var(--display); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .add-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .panel-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
   .panel-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
-  .form-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 12px; }
-  .field { display: flex; flex-direction: column; gap: 6px; }
+  .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
+  .form-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 10px; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
   .field label { font-family: var(--mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  .field input, .field select { background: var(--bg); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-family: var(--body); font-size: 14px; padding: 10px 14px; outline: none; transition: border-color 0.2s; width: 100%; }
-  .field input:focus, .field select:focus { border-color: var(--red); }
-  .field select option { background: var(--surface); }
+  .field input, .field select { background: var(--bg); border: 1px solid var(--border2); border-radius: 6px; color: var(--text); font-family: var(--body); font-size: 13px; padding: 8px 12px; outline: none; transition: border-color 0.2s; width: 100%; }
+  .field input:focus, .field select:focus { border-color: var(--accent); background: #fff; }
+  .field select option { background: #fff; }
   .form-actions { display: flex; justify-content: flex-end; margin-top: 4px; }
 
-  .btn { font-family: var(--mono); font-size: 12px; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px; }
-  .btn-primary { background: var(--red); color: #fff; font-weight: 500; }
-  .btn-primary:hover { filter: brightness(1.15); transform: translateY(-1px); }
-  .btn-danger { background: transparent; border: 1px solid var(--border2); color: var(--red); }
-  .btn-danger:hover { border-color: var(--red); background: color-mix(in srgb, var(--red) 8%, transparent); }
-  .btn-edit { background: transparent; border: 1px solid var(--border2); color: var(--muted); }
-  .btn-edit:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-sm { padding: 6px 12px; font-size: 11px; }
+  .btn { font-family: var(--mono); font-size: 11px; padding: 7px 14px; border-radius: 6px; border: 1px solid var(--border2); cursor: pointer; transition: all 0.15s; background: var(--surface); color: var(--muted); }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-primary { background: var(--red); color: #fff; border-color: var(--red); font-weight: 500; padding: 8px 18px; font-size: 12px; }
+  .btn-primary:hover { filter: brightness(1.1); color: #fff; border-color: var(--red); }
+  .btn-danger:hover { border-color: var(--red); color: var(--red); }
+  .btn-sm { padding: 5px 10px; font-size: 10px; }
 
-  .table-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; animation: fadeUp 0.6s 0.2s ease both; }
-  .table-head { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
-  .table-head h3 { font-family: var(--display); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
-  .count-badge { font-family: var(--mono); font-size: 11px; background: var(--bg); border: 1px solid var(--border2); color: var(--muted); padding: 3px 10px; border-radius: 20px; }
-  .search-bar { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; }
-  .search-bar input, .search-bar select { background: var(--bg); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-family: var(--mono); font-size: 12px; padding: 8px 14px; outline: none; transition: border-color 0.2s; }
+  .table-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .table-head { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+  .table-head h3 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .count-badge { font-family: var(--mono); font-size: 10px; background: var(--bg); border: 1px solid var(--border2); color: var(--muted); padding: 2px 8px; border-radius: 10px; }
+  .search-bar { padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; }
+  .search-bar input, .search-bar select { background: var(--bg); border: 1px solid var(--border2); border-radius: 6px; color: var(--text); font-family: var(--mono); font-size: 11px; padding: 7px 12px; outline: none; transition: border-color 0.2s; }
   .search-bar input { flex: 1; }
-  .search-bar input:focus, .search-bar select:focus { border-color: var(--red); }
+  .search-bar input:focus, .search-bar select:focus { border-color: var(--accent); background: #fff; }
   .search-bar input::placeholder { color: var(--muted); }
-  .search-bar select option { background: var(--surface); }
+  .search-bar select option { background: #fff; }
 
   .table-scroll { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; min-width: 800px; }
-  thead th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
-  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  table { width: 100%; border-collapse: collapse; min-width: 700px; }
+  thead th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); padding: 10px 14px; text-align: left; background: #fafbfd; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
   tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: color-mix(in srgb, var(--red) 3%, transparent); }
-  tbody td { padding: 13px 16px; font-size: 13px; vertical-align: middle; }
+  tbody tr:hover { background: #fff5f5; }
+  tbody td { padding: 11px 14px; font-size: 12px; vertical-align: middle; }
   .td-mono { font-family: var(--mono); font-size: 11px; color: var(--muted); }
   .td-link { color: var(--accent); font-family: var(--mono); font-size: 11px; text-decoration: none; }
   .td-link:hover { text-decoration: underline; }
+  .actions { display: flex; gap: 4px; }
+  .empty-state { padding: 48px; text-align: center; color: var(--muted); font-family: var(--mono); font-size: 12px; }
 
-  .mandate-pill { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 20px; border: 1px solid; display: inline-block; }
-  .pill-active { color: var(--green); border-color: color-mix(in srgb, var(--green) 30%, transparent); background: color-mix(in srgb, var(--green) 8%, transparent); }
-  .pill-hold { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 30%, transparent); background: color-mix(in srgb, var(--gold) 8%, transparent); }
-  .pill-closed { color: var(--muted); border-color: var(--border2); }
+  .mandate-pill { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 10px; border: 1px solid; display: inline-block; }
+  .pill-active  { color: var(--green); border-color: #b6e8d4; background: #edf9f4; }
+  .pill-hold    { color: var(--gold);  border-color: #f5d68a; background: #fdf8ec; }
+  .pill-closed  { color: var(--muted); border-color: var(--border2); background: var(--bg); }
 
-  .actions { display: flex; gap: 6px; }
-  .empty-state { padding: 64px 24px; text-align: center; }
-  .empty-state p { font-family: var(--mono); font-size: 12px; color: var(--muted); }
-
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); overflow-y: auto; padding: 24px; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px; overflow-y: auto; }
   .modal-overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 28px; width: 100%; max-width: 600px; animation: fadeUp 0.25s ease; margin: auto; }
-  .modal h3 { font-family: var(--display); font-size: 20px; font-weight: 700; margin-bottom: 24px; }
-  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 24px; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; width: 100%; max-width: 600px; margin: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.12); }
+  .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 20px; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
 
-  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 12px 20px; font-family: var(--mono); font-size: 12px; color: var(--text); z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.3s; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+  .toast { position: fixed; bottom: 20px; right: 20px; background: var(--text); color: #fff; border-radius: 8px; padding: 10px 18px; font-family: var(--mono); font-size: 12px; z-index: 999; transform: translateY(60px); opacity: 0; transition: all 0.3s; }
   .toast.show { transform: translateY(0); opacity: 1; }
-  .toast.success { border-color: var(--green); color: var(--green); }
-  .toast.error { border-color: var(--red); color: var(--red); }
+  .toast.success { background: var(--green); }
+  .toast.error { background: var(--red); }
 
-  footer { margin-top: 80px; border-top: 1px solid var(--border); padding: 24px 0; }
+  footer { margin-top: 60px; border-top: 1px solid var(--border); padding: 16px 0; }
   .footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; }
-  .footer-inner p { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .footer-inner p { font-family: var(--mono); font-size: 10px; color: var(--muted); }
 
   @media(max-width:768px) { .form-grid,.form-grid-2{grid-template-columns:1fr} .wrapper{padding:0 16px} }
 </style>
 </head>
 <body>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-
 <nav>
   <div class="nav-inner">
     <a href="index.html" class="logo"><span class="logo-dot"></span>RecruitIQ</a>
     <a href="index.html" class="nav-back">← Home</a>
   </div>
 </nav>
-
 <div class="wrapper">
   <div class="page-header">
     <div class="page-label">Management</div>
     <h1 class="page-title">Roles</h1>
-    <p class="page-sub">Define and manage open positions linked to hiring companies.</p>
   </div>
-
-  <!-- ADD FORM -->
   <div class="add-panel">
     <div class="panel-title">Add Role</div>
     <div class="form-grid">
-      <div class="field"><label>Hiring Company *</label><select id="i-company"><option value="">— Select Company —</option></select></div>
+      <div class="field"><label>Hiring Company *</label><select id="i-company"><option value="">— Select —</option></select></div>
       <div class="field"><label>Role Name *</label><input type="text" id="i-name" placeholder="e.g. Software Engineer" /></div>
-      <div class="field"><label>No. of Positions</label><input type="number" id="i-positions" placeholder="1" value="1" min="1" /></div>
+      <div class="field"><label>No. of Positions</label><input type="number" id="i-positions" value="1" min="1" /></div>
     </div>
     <div class="form-grid">
       <div class="field"><label>Experience Required</label><input type="text" id="i-exp" placeholder="e.g. 3-5 years" /></div>
@@ -143,24 +120,14 @@
     </div>
     <div class="form-grid-2">
       <div class="field"><label>Mandate Status</label>
-        <select id="i-status">
-          <option value="ACTIVE">Active</option>
-          <option value="ON_HOLD">On Hold</option>
-          <option value="CLOSED">Closed</option>
-        </select>
+        <select id="i-status"><option value="ACTIVE">Active</option><option value="ON_HOLD">On Hold</option><option value="CLOSED">Closed</option></select>
       </div>
     </div>
-    <div class="form-actions">
-      <button class="btn btn-primary" onclick="addRole()">+ Add Role</button>
-    </div>
+    <div class="form-actions"><button class="btn btn-primary" onclick="addRole()">+ Add Role</button></div>
   </div>
 
-  <!-- TABLE -->
   <div class="table-panel">
-    <div class="table-head">
-      <h3>All Roles</h3>
-      <span class="count-badge" id="count">0 roles</span>
-    </div>
+    <div class="table-head"><h3>All Roles</h3><span class="count-badge" id="count">0 roles</span></div>
     <div class="search-bar">
       <input type="text" id="search" placeholder="Search roles, companies..." oninput="filterRoles()" />
       <select id="filter-status" onchange="filterRoles()">
@@ -172,27 +139,13 @@
     </div>
     <div class="table-scroll">
       <table>
-        <thead>
-          <tr>
-            <th>Role Name</th>
-            <th>Company</th>
-            <th>Positions</th>
-            <th>Experience</th>
-            <th>Location</th>
-            <th>JD</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="table-body">
-          <tr><td colspan="8"><div class="empty-state"><p>Loading...</p></div></td></tr>
-        </tbody>
+        <thead><tr><th>Role Name</th><th>Company</th><th>Positions</th><th>Experience</th><th>Location</th><th>JD</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="table-body"><tr><td colspan="8"><div class="empty-state">Loading...</div></td></tr></tbody>
       </table>
     </div>
   </div>
 </div>
 
-<!-- EDIT MODAL -->
 <div class="modal-overlay" id="edit-modal">
   <div class="modal">
     <h3>Edit Role</h3>
@@ -205,168 +158,73 @@
       <div class="field"><label>Location</label><input type="text" id="e-location" /></div>
       <div class="field"><label>JD Link</label><input type="url" id="e-jd" /></div>
       <div class="field"><label>Mandate Status</label>
-        <select id="e-status">
-          <option value="ACTIVE">Active</option>
-          <option value="ON_HOLD">On Hold</option>
-          <option value="CLOSED">Closed</option>
-        </select>
+        <select id="e-status"><option value="ACTIVE">Active</option><option value="ON_HOLD">On Hold</option><option value="CLOSED">Closed</option></select>
       </div>
     </div>
     <div class="modal-actions">
-      <button class="btn btn-edit" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="closeModal()">Cancel</button>
       <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
     </div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
-
-<footer>
-  <div class="footer-inner">
-    <p>RecruitIQ · 10xDeveloper.tech</p>
-    <p>role table</p>
-  </div>
-</footer>
+<footer><div class="footer-inner"><p>RecruitIQ · 10xDeveloper.tech</p><p>role table</p></div></footer>
 
 <script>
-  const API = '/api';
-  let roles = [], companies = [];
-  let editingId = null;
-
+  const API='/api'; let roles=[],companies=[]; let editingId=null;
   async function load() {
     try {
-      const [rRes, cRes] = await Promise.all([
-        fetch(`${API}/roles`),
-        fetch(`${API}/companies`),
-      ]);
-      roles = await rRes.json();
-      companies = await cRes.json();
-      populateCompanies();
+      const [rRes,cRes]=await Promise.all([fetch(`${API}/roles`),fetch(`${API}/companies`)]);
+      roles=await rRes.json(); companies=await cRes.json();
+      const opts=companies.map(c=>`<option value="${c.hiringcompanyid}">${c.name}</option>`).join('');
+      document.getElementById('i-company').innerHTML='<option value="">— Select Company —</option>'+opts;
       render(roles);
-    } catch(e) { showToast('Failed to load data', 'error'); }
+    } catch(e){showToast('Failed to load','error');}
   }
-
-  function populateCompanies() {
-    const opts = companies.map(c => `<option value="${c.hiringcompanyid}">${c.name}</option>`).join('');
-    document.getElementById('i-company').innerHTML = '<option value="">— Select Company —</option>' + opts;
+  function pill(s){if(s==='ACTIVE')return`<span class="mandate-pill pill-active">Active</span>`;if(s==='ON_HOLD')return`<span class="mandate-pill pill-hold">On Hold</span>`;return`<span class="mandate-pill pill-closed">Closed</span>`;}
+  function render(data){
+    const tbody=document.getElementById('table-body');
+    document.getElementById('count').textContent=`${data.length} role${data.length===1?'':'s'}`;
+    if(!data.length){tbody.innerHTML=`<tr><td colspan="8"><div class="empty-state">No roles yet.</div></td></tr>`;return;}
+    tbody.innerHTML=data.map(r=>`<tr>
+      <td><strong>${r.name}</strong></td><td>${r.companyname||'—'}</td>
+      <td class="td-mono">${r.numpositions||1}</td>
+      <td style="color:var(--muted)">${r.experiencerequired||'—'}</td>
+      <td style="color:var(--muted)">${r.location||'—'}</td>
+      <td>${r.jdlink?`<a class="td-link" href="${r.jdlink.startsWith('http')?r.jdlink:'https://'+r.jdlink}" target="_blank" rel="noopener">View ↗</a>`:'—'}</td>
+      <td>${pill(r.mandatestatus)}</td>
+      <td><div class="actions">
+        <button class="btn btn-sm" onclick="openEdit(${r.roleid})">Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteRole(${r.roleid})">Del</button>
+      </div></td></tr>`).join('');
   }
-
-  function mandatePill(status) {
-    if (status === 'ACTIVE') return `<span class="mandate-pill pill-active">Active</span>`;
-    if (status === 'ON_HOLD') return `<span class="mandate-pill pill-hold">On Hold</span>`;
-    return `<span class="mandate-pill pill-closed">Closed</span>`;
+  function filterRoles(){const q=document.getElementById('search').value.toLowerCase();const fs=document.getElementById('filter-status').value;render(roles.filter(r=>(!q||r.name.toLowerCase().includes(q)||(r.companyname||'').toLowerCase().includes(q))&&(!fs||r.mandatestatus===fs)));}
+  async function addRole(){
+    const companyId=document.getElementById('i-company').value;const name=document.getElementById('i-name').value.trim();
+    if(!companyId)return showToast('Please select a company','error');if(!name)return showToast('Role name required','error');
+    const body={hiringCompanyId:parseInt(companyId),name,numPositions:parseInt(document.getElementById('i-positions').value)||1,
+      experienceRequired:document.getElementById('i-exp').value.trim()||null,location:document.getElementById('i-location').value.trim()||null,
+      jdLink:document.getElementById('i-jd').value.trim()||null,mandateStatus:document.getElementById('i-status').value};
+    try{const res=await fetch(`${API}/roles`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!res.ok){const e=await res.json();throw new Error(e.error);}
+    ['i-name','i-exp','i-location','i-jd'].forEach(id=>document.getElementById(id).value='');document.getElementById('i-positions').value='1';document.getElementById('i-company').value='';
+    showToast('Role added!','success');load();}catch(e){showToast(e.message,'error');}
   }
-
-  function render(data) {
-    const tbody = document.getElementById('table-body');
-    document.getElementById('count').textContent = `${data.length} role${data.length===1?'':'s'}`;
-    if (!data.length) {
-      tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><p>No roles yet — add one above.</p></div></td></tr>`;
-      return;
-    }
-    tbody.innerHTML = data.map(r => `
-      <tr>
-        <td><strong>${r.name}</strong></td>
-        <td>${r.companyname || '—'}</td>
-        <td class="td-mono">${r.numpositions || 1}</td>
-        <td style="color:var(--muted)">${r.experiencerequired || '—'}</td>
-        <td style="color:var(--muted)">${r.location || '—'}</td>
-        <td>${r.jdlink ? `<a class="td-link" href="${r.jdlink.startsWith('http') ? r.jdlink : 'https://'+r.jdlink}" target="_blank" rel="noopener">View ↗</a>` : '—'}</td>
-        <td>${mandatePill(r.mandatestatus)}</td>
-        <td><div class="actions">
-          <button class="btn btn-edit btn-sm" onclick="openEdit(${r.roleid})">Edit</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteRole(${r.roleid})">Del</button>
-        </div></td>
-      </tr>
-    `).join('');
+  function openEdit(id){const r=roles.find(x=>x.roleid===id);if(!r)return;editingId=id;
+    document.getElementById('e-name').value=r.name||'';document.getElementById('e-positions').value=r.numpositions||1;
+    document.getElementById('e-exp').value=r.experiencerequired||'';document.getElementById('e-location').value=r.location||'';
+    document.getElementById('e-jd').value=r.jdlink||'';document.getElementById('e-status').value=r.mandatestatus||'ACTIVE';
+    document.getElementById('edit-modal').classList.add('open');}
+  function closeModal(){document.getElementById('edit-modal').classList.remove('open');editingId=null;}
+  async function saveEdit(){
+    const body={name:document.getElementById('e-name').value.trim(),numPositions:parseInt(document.getElementById('e-positions').value)||1,
+      experienceRequired:document.getElementById('e-exp').value.trim()||null,location:document.getElementById('e-location').value.trim()||null,
+      jdLink:document.getElementById('e-jd').value.trim()||null,mandateStatus:document.getElementById('e-status').value};
+    try{await fetch(`${API}/roles/${editingId}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    closeModal();showToast('Role updated!','success');load();}catch(e){showToast(e.message,'error');}
   }
-
-  function filterRoles() {
-    const q = document.getElementById('search').value.toLowerCase();
-    const fs = document.getElementById('filter-status').value;
-    render(roles.filter(r =>
-      (!q || r.name.toLowerCase().includes(q) || (r.companyname||'').toLowerCase().includes(q)) &&
-      (!fs || r.mandatestatus === fs)
-    ));
-  }
-
-  async function addRole() {
-    const companyId = document.getElementById('i-company').value;
-    const name = document.getElementById('i-name').value.trim();
-    if (!companyId) return showToast('Please select a company', 'error');
-    if (!name) return showToast('Role name is required', 'error');
-    const body = {
-      hiringCompanyId: parseInt(companyId), name,
-      numPositions: parseInt(document.getElementById('i-positions').value) || 1,
-      experienceRequired: document.getElementById('i-exp').value.trim() || null,
-      location: document.getElementById('i-location').value.trim() || null,
-      jdLink: document.getElementById('i-jd').value.trim() || null,
-      mandateStatus: document.getElementById('i-status').value,
-    };
-    try {
-      const res = await fetch(`${API}/roles`, {
-        method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
-      });
-      if (!res.ok) { const e = await res.json(); throw new Error(e.error); }
-      ['i-name','i-positions','i-exp','i-location','i-jd'].forEach(id => {
-        const el = document.getElementById(id);
-        el.value = id === 'i-positions' ? '1' : '';
-      });
-      document.getElementById('i-company').value = '';
-      showToast('Role added!', 'success');
-      load();
-    } catch(e) { showToast(e.message, 'error'); }
-  }
-
-  function openEdit(id) {
-    const r = roles.find(x => x.roleid === id);
-    if (!r) return;
-    editingId = id;
-    document.getElementById('e-name').value = r.name || '';
-    document.getElementById('e-positions').value = r.numpositions || 1;
-    document.getElementById('e-exp').value = r.experiencerequired || '';
-    document.getElementById('e-location').value = r.location || '';
-    document.getElementById('e-jd').value = r.jdlink || '';
-    document.getElementById('e-status').value = r.mandatestatus || 'ACTIVE';
-    document.getElementById('edit-modal').classList.add('open');
-  }
-  function closeModal() { document.getElementById('edit-modal').classList.remove('open'); editingId = null; }
-
-  async function saveEdit() {
-    const body = {
-      name: document.getElementById('e-name').value.trim(),
-      numPositions: parseInt(document.getElementById('e-positions').value) || 1,
-      experienceRequired: document.getElementById('e-exp').value.trim() || null,
-      location: document.getElementById('e-location').value.trim() || null,
-      jdLink: document.getElementById('e-jd').value.trim() || null,
-      mandateStatus: document.getElementById('e-status').value,
-    };
-    try {
-      await fetch(`${API}/roles/${editingId}`, {
-        method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
-      });
-      closeModal();
-      showToast('Role updated!', 'success');
-      load();
-    } catch(e) { showToast(e.message, 'error'); }
-  }
-
-  async function deleteRole(id) {
-    if (!confirm('Delete this role? This cannot be undone.')) return;
-    try {
-      await fetch(`${API}/roles/${id}`, { method: 'DELETE' });
-      showToast('Role deleted', 'success');
-      load();
-    } catch(e) { showToast(e.message, 'error'); }
-  }
-
-  function showToast(msg, type='success') {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = `toast ${type} show`;
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
-
+  async function deleteRole(id){if(!confirm('Delete this role?'))return;try{await fetch(`${API}/roles/${id}`,{method:'DELETE'});showToast('Deleted','success');load();}catch(e){showToast(e.message,'error');}}
+  function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast ${type} show`;setTimeout(()=>t.classList.remove('show'),3000);}
   load();
 </script>
 </body>
