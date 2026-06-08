@@ -149,4 +149,56 @@ router.get('/stats', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// ── OFFERS ────────────────────────────────────────────────────
+
+router.get('/offers', async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      `SELECT o.*,
+         c.name AS candidatename,
+         r.name AS rolename,
+         hc.name AS companyname
+       FROM offer o
+       JOIN candidateentry ce ON o.candidateentryid = ce.candidateentryid
+       JOIN candidate c ON ce.candidateid = c.candidateid
+       JOIN role r ON ce.roleid = r.roleid
+       JOIN hiringcompany hc ON r.hiringcompanyid = hc.hiringcompanyid
+       ORDER BY o.createdat DESC`
+    );
+    res.json(rows);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+router.post('/offers', async (req, res) => {
+  const { candidateEntryId, offeredCtc, date, acceptanceDeadline, joiningDate, noticePeriod, invoiceId, isSent, hasAccepted } = req.body;
+  try {
+    const { rows } = await pool.query(
+      `INSERT INTO offer (candidateentryid, offeredctc, date, acceptancedeadline, joiningdate, noticeperiod, invoiceid, issent, hasaccepted)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
+      [candidateEntryId, offeredCtc, date, acceptanceDeadline, joiningDate, noticePeriod, invoiceId, isSent||false, hasAccepted||false]
+    );
+    res.status(201).json(rows[0]);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+router.put('/offers/:id', async (req, res) => {
+  const { offeredCtc, date, acceptanceDeadline, joiningDate, noticePeriod, invoiceId, isSent, hasAccepted } = req.body;
+  try {
+    const { rows } = await pool.query(
+      `UPDATE offer SET offeredctc=$1, date=$2, acceptancedeadline=$3, joiningdate=$4,
+         noticeperiod=$5, invoiceid=$6, issent=$7, hasaccepted=$8, updatedat=NOW()
+       WHERE offerid=$9 RETURNING *`,
+      [offeredCtc, date, acceptanceDeadline, joiningDate, noticePeriod, invoiceId, isSent||false, hasAccepted||false, req.params.id]
+    );
+    res.json(rows[0]);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+router.delete('/offers/:id', async (req, res) => {
+  try {
+    await pool.query(`DELETE FROM offer WHERE offerid=$1`, [req.params.id]);
+    res.json({ message: 'Deleted' });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 module.exports = router;
