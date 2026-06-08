@@ -268,12 +268,12 @@
     document.getElementById('filter-company').innerHTML='<option value="">All Companies</option>'+companies.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
   }
 
-  function toggleRole(key){
-    if(collapsedRoles.has(key))collapsedRoles.delete(key);else collapsedRoles.add(key);
-    const body=document.getElementById('role-body-'+CSS.escape(key));
-    const btn=document.getElementById('role-btn-'+CSS.escape(key));
-    if(body){body.classList.toggle('collapsed',collapsedRoles.has(key));}
-    if(btn){btn.textContent=collapsedRoles.has(key)?'+':'−';}
+  function toggleRole(idx){
+    if(collapsedRoles.has(idx))collapsedRoles.delete(idx);else collapsedRoles.add(idx);
+    const body=document.getElementById('role-body-'+idx);
+    const btn=document.getElementById('role-btn-'+idx);
+    if(body)body.classList.toggle('collapsed',collapsedRoles.has(idx));
+    if(btn)btn.textContent=collapsedRoles.has(idx)?'+':'−';
   }
 
   function renderGrouped(){
@@ -287,22 +287,22 @@
     if(!filtered.length){document.getElementById('grouped-view').innerHTML='<div class="empty-state">No entries found.</div>';return;}
     const byCompany={};
     filtered.forEach(e=>{const co=e.companyname||'Unknown';const ro=e.rolename||'Unknown';if(!byCompany[co])byCompany[co]={};if(!byCompany[co][ro])byCompany[co][ro]=[];byCompany[co][ro].push(e);});
-    let html='';
+    let html='';let roleIdx=0;
     Object.keys(byCompany).sort().forEach(co=>{
       const roles=byCompany[co];const roleNames=Object.keys(roles).sort();
       const totalCo=roleNames.reduce((s,r)=>s+roles[r].length,0);
       html+=`<div class="company-group"><div class="company-header">🏢 ${co}<span class="co-badge">${totalCo} entr${totalCo===1?'y':'ies'}</span></div>`;
       roleNames.forEach(ro=>{
-        const key=`${co}__${ro}`;
+        const idx=roleIdx++;
         const roleEntries=roles[ro].sort(statusSort);
-        const isCollapsed=collapsedRoles.has(key);
+        const isCollapsed=collapsedRoles.has(idx);
         html+=`<div class="role-group">
-          <div class="role-header" onclick="toggleRole('${key.replace(/'/g,"\\'")}')">
+          <div class="role-header" onclick="toggleRole(${idx})">
             🎯 ${ro}
             <span class="role-count">${roleEntries.length} candidate${roleEntries.length===1?'':'s'}</span>
-            <button class="collapse-btn" id="role-btn-${key}">${isCollapsed?'+':'−'}</button>
+            <button class="collapse-btn" id="role-btn-${idx}" onclick="event.stopPropagation();toggleRole(${idx})">${isCollapsed?'+':'−'}</button>
           </div>
-          <div class="role-body${isCollapsed?' collapsed':''}" id="role-body-${key}">
+          <div class="role-body${isCollapsed?' collapsed':''}" id="role-body-${idx}">
           <table><thead><tr>
             <th>Candidate</th><th>Status</th><th>Recruiter</th><th>Exp</th><th>CTC</th><th>ECTC</th><th>NP</th>
             <th>CV Date</th><th>CV</th><th>R1</th><th>R1 FB</th><th>R2</th><th>R2 FB</th>
