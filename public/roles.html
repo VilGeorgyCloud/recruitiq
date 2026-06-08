@@ -179,12 +179,12 @@
 
   function pill(s){if(s==='ACTIVE')return`<span class="mandate-pill pill-active">Active</span>`;if(s==='ON_HOLD')return`<span class="mandate-pill pill-hold">On Hold</span>`;return`<span class="mandate-pill pill-closed">Closed</span>`;}
 
-  function toggleCompany(co){
-    if(collapsedCompanies.has(co))collapsedCompanies.delete(co);else collapsedCompanies.add(co);
-    const body=document.getElementById('co-body-'+CSS.escape(co));
-    const btn=document.getElementById('co-btn-'+CSS.escape(co));
-    if(body)body.classList.toggle('collapsed',collapsedCompanies.has(co));
-    if(btn)btn.textContent=collapsedCompanies.has(co)?'+':'−';
+  function toggleCompany(idx){
+    if(collapsedCompanies.has(idx))collapsedCompanies.delete(idx);else collapsedCompanies.add(idx);
+    const body=document.getElementById('co-body-'+idx);
+    const btn=document.getElementById('co-btn-'+idx);
+    if(body)body.classList.toggle('collapsed',collapsedCompanies.has(idx));
+    if(btn)btn.textContent=collapsedCompanies.has(idx)?'+':'−';
   }
 
   function renderGrouped(){
@@ -197,16 +197,16 @@
     if(!filtered.length){document.getElementById('grouped-view').innerHTML='<div class="empty-state">No roles found.</div>';return;}
     const byCompany={};
     filtered.forEach(r=>{const co=r.companyname||'Unknown';if(!byCompany[co])byCompany[co]=[];byCompany[co].push(r);});
-    let html='';
+    let html='';let coIdx=0;
     Object.keys(byCompany).sort().forEach(co=>{
-      const coRoles=byCompany[co];const isCollapsed=collapsedCompanies.has(co);
+      const coRoles=byCompany[co];const idx=coIdx++;const isCollapsed=collapsedCompanies.has(idx);
       html+=`<div class="company-group">
-        <div class="company-header" onclick="toggleCompany('${co.replace(/'/g,"\\'")}')">
+        <div class="company-header" onclick="toggleCompany(${idx})">
           🏢 ${co}
           <span class="co-badge">${coRoles.length} role${coRoles.length===1?'':'s'}</span>
-          <button class="collapse-btn" id="co-btn-${co}">${isCollapsed?'+':'−'}</button>
+          <button class="collapse-btn" id="co-btn-${idx}" onclick="event.stopPropagation();toggleCompany(${idx})">${isCollapsed?'+':'−'}</button>
         </div>
-        <div class="company-body${isCollapsed?' collapsed':''}" id="co-body-${co}">
+        <div class="company-body${isCollapsed?' collapsed':''}" id="co-body-${idx}">
           <table><thead><tr>
             <th>Role Name</th><th>Positions</th><th>Experience</th><th>Location</th><th>JD</th><th>Status</th><th>Actions</th>
           </tr></thead><tbody>`;
