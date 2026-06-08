@@ -5,116 +5,90 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Candidates — RecruitIQ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #0b0c0f; --surface: #13151a; --border: #1e2028; --border2: #2a2d38;
-    --accent: #4f6ef7; --accent2: #c8b8ff; --gold: #f0c060; --green: #3ecf8e;
-    --red: #f26a6a; --text: #e8eaf0; --muted: #6b7080;
-    --mono: 'DM Mono', monospace; --display: 'Syne', sans-serif; --body: 'DM Sans', sans-serif;
+    --bg: #f8f9fc; --surface: #ffffff; --border: #e5e7ef; --border2: #d0d3e0;
+    --accent: #4f6ef7; --accent2: #7c5cbf; --green: #18a066; --red: #d94f4f; --gold: #d4920a;
+    --text: #1a1d2e; --muted: #7b8099;
+    --body: 'Poppins', sans-serif; --mono: 'DM Mono', monospace;
   }
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font-family: var(--body); min-height: 100vh; overflow-x: hidden; }
-  body::before {
-    content: ''; position: fixed; inset: 0;
-    background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 48px 48px; opacity: 0.4; pointer-events: none; z-index: 0;
-  }
-  .orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; opacity: 0.15; }
-  .orb-1 { width: 500px; height: 500px; background: var(--accent2); top: -200px; left: -100px; }
-  .orb-2 { width: 300px; height: 300px; background: var(--green); bottom: -100px; right: -100px; }
+  body { background: var(--bg); color: var(--text); font-family: var(--body); min-height: 100vh; }
 
-  nav { position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); background: rgba(11,12,15,0.85); backdrop-filter: blur(12px); }
-  .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
-  .logo { font-family: var(--display); font-size: 18px; font-weight: 800; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 8px; }
-  .logo-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); animation: pulse 2s ease-in-out infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
-  .nav-back { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--border2); padding: 4px 12px; border-radius: 4px; text-decoration: none; transition: color 0.2s, border-color 0.2s; }
-  .nav-back:hover { color: var(--text); border-color: var(--accent); }
+  nav { position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.92); backdrop-filter: blur(10px); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 52px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family: var(--body); font-size: 16px; font-weight: 700; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+  .logo-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+  .nav-back { font-family: var(--mono); font-size: 10px; color: var(--muted); border: 1px solid var(--border2); padding: 4px 10px; border-radius: 4px; text-decoration: none; transition: color 0.2s, border-color 0.2s; }
+  .nav-back:hover { color: var(--accent); border-color: var(--accent); }
 
-  .wrapper { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+  .wrapper { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
 
-  .page-header { padding: 48px 0 36px; animation: fadeUp 0.6s ease both; }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-  .page-label { font-family: var(--mono); font-size: 11px; color: var(--accent2); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-  .page-label::before { content: ''; display: block; width: 20px; height: 1px; background: var(--accent2); }
-  .page-title { font-family: var(--display); font-size: 36px; font-weight: 800; letter-spacing: -1px; }
-  .page-sub { font-size: 14px; color: var(--muted); margin-top: 6px; font-weight: 300; }
+  .page-header { padding: 20px 0 16px; }
+  .page-label { font-family: var(--mono); font-size: 10px; color: var(--accent2); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .page-title { font-size: 18px; font-weight: 600; }
 
-  /* FORM */
-  .add-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 32px; animation: fadeUp 0.6s 0.1s ease both; }
-  .panel-title { font-family: var(--display); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .add-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .panel-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
   .panel-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
-  .form-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 12px; }
-  .field { display: flex; flex-direction: column; gap: 6px; }
+  .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
+  .form-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 10px; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
   .field label { font-family: var(--mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  .field input, .field select {
-    background: var(--bg); border: 1px solid var(--border2); border-radius: 8px;
-    color: var(--text); font-family: var(--body); font-size: 14px;
-    padding: 10px 14px; outline: none; transition: border-color 0.2s; width: 100%;
-  }
-  .field input:focus, .field select:focus { border-color: var(--accent2); }
-  .field select option { background: var(--surface); }
+  .field input, .field select { background: var(--bg); border: 1px solid var(--border2); border-radius: 6px; color: var(--text); font-family: var(--body); font-size: 13px; padding: 8px 12px; outline: none; transition: border-color 0.2s; width: 100%; }
+  .field input:focus, .field select:focus { border-color: var(--accent); background: #fff; }
+  .field select option { background: #fff; }
   .form-actions { display: flex; justify-content: flex-end; margin-top: 4px; }
 
-  .btn { font-family: var(--mono); font-size: 12px; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px; }
-  .btn-primary { background: var(--accent2); color: #1a0050; font-weight: 500; }
-  .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
-  .btn-danger { background: transparent; border: 1px solid var(--border2); color: var(--red); }
-  .btn-danger:hover { border-color: var(--red); background: color-mix(in srgb, var(--red) 8%, transparent); }
-  .btn-edit { background: transparent; border: 1px solid var(--border2); color: var(--muted); }
-  .btn-edit:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-sm { padding: 6px 12px; font-size: 11px; }
+  .btn { font-family: var(--mono); font-size: 11px; padding: 7px 14px; border-radius: 6px; border: 1px solid var(--border2); cursor: pointer; transition: all 0.15s; background: var(--surface); color: var(--muted); }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-primary { background: var(--accent2); color: #fff; border-color: var(--accent2); font-weight: 500; padding: 8px 18px; font-size: 12px; }
+  .btn-primary:hover { filter: brightness(1.1); color: #fff; border-color: var(--accent2); }
+  .btn-danger:hover { border-color: var(--red); color: var(--red); }
+  .btn-sm { padding: 5px 10px; font-size: 10px; }
 
-  /* TABLE */
-  .table-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; animation: fadeUp 0.6s 0.2s ease both; }
-  .table-head { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
-  .table-head h3 { font-family: var(--display); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
-  .count-badge { font-family: var(--mono); font-size: 11px; background: var(--bg); border: 1px solid var(--border2); color: var(--muted); padding: 3px 10px; border-radius: 20px; }
-  .search-bar { padding: 16px 24px; border-bottom: 1px solid var(--border); }
-  .search-bar input { width: 100%; background: var(--bg); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-family: var(--mono); font-size: 12px; padding: 8px 14px; outline: none; transition: border-color 0.2s; }
-  .search-bar input:focus { border-color: var(--accent2); }
+  .table-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .table-head { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+  .table-head h3 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .count-badge { font-family: var(--mono); font-size: 10px; background: var(--bg); border: 1px solid var(--border2); color: var(--muted); padding: 2px 8px; border-radius: 10px; }
+  .search-bar { padding: 12px 20px; border-bottom: 1px solid var(--border); }
+  .search-bar input { width: 100%; background: var(--bg); border: 1px solid var(--border2); border-radius: 6px; color: var(--text); font-family: var(--mono); font-size: 11px; padding: 7px 12px; outline: none; transition: border-color 0.2s; }
+  .search-bar input:focus { border-color: var(--accent); background: #fff; }
   .search-bar input::placeholder { color: var(--muted); }
 
   .table-scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; min-width: 900px; }
-  thead th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
-  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  thead th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); padding: 10px 14px; text-align: left; background: #fafbfd; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
   tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: color-mix(in srgb, var(--accent2) 3%, transparent); }
-  tbody td { padding: 13px 16px; font-size: 13px; vertical-align: middle; }
+  tbody tr:hover { background: #f5f7ff; }
+  tbody td { padding: 11px 14px; font-size: 12px; vertical-align: middle; }
   .td-mono { font-family: var(--mono); font-size: 11px; color: var(--muted); }
   .td-link { color: var(--accent); font-family: var(--mono); font-size: 11px; text-decoration: none; }
   .td-link:hover { text-decoration: underline; }
+  .actions { display: flex; gap: 4px; }
+  .empty-state { padding: 48px; text-align: center; color: var(--muted); font-family: var(--mono); font-size: 12px; }
 
-  .actions { display: flex; gap: 6px; }
-  .empty-state { padding: 64px 24px; text-align: center; }
-  .empty-state p { font-family: var(--mono); font-size: 12px; color: var(--muted); }
-
-  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 12px 20px; font-family: var(--mono); font-size: 12px; color: var(--text); z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.3s; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-  .toast.show { transform: translateY(0); opacity: 1; }
-  .toast.success { border-color: var(--green); color: var(--green); }
-  .toast.error { border-color: var(--red); color: var(--red); }
-
-  /* MODAL */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); overflow-y: auto; padding: 24px; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px; overflow-y: auto; }
   .modal-overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 28px; width: 100%; max-width: 640px; animation: fadeUp 0.25s ease; }
-  .modal h3 { font-family: var(--display); font-size: 20px; font-weight: 700; margin-bottom: 24px; }
-  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 24px; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; width: 100%; max-width: 640px; margin: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.12); }
+  .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 20px; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
 
-  footer { margin-top: 80px; border-top: 1px solid var(--border); padding: 24px 0; }
+  .toast { position: fixed; bottom: 20px; right: 20px; background: var(--text); color: #fff; border-radius: 8px; padding: 10px 18px; font-family: var(--mono); font-size: 12px; z-index: 999; transform: translateY(60px); opacity: 0; transition: all 0.3s; }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { background: var(--green); }
+  .toast.error { background: var(--red); }
+
+  footer { margin-top: 60px; border-top: 1px solid var(--border); padding: 16px 0; }
   .footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; }
-  .footer-inner p { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .footer-inner p { font-family: var(--mono); font-size: 10px; color: var(--muted); }
 
-  @media(max-width:768px) { .form-grid, .form-grid-2 { grid-template-columns: 1fr; } .wrapper { padding: 0 16px; } }
+  @media(max-width:768px) { .form-grid,.form-grid-2{grid-template-columns:1fr} .wrapper{padding:0 16px} }
 </style>
 </head>
 <body>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
 
 <nav>
   <div class="nav-inner">
@@ -127,10 +101,8 @@
   <div class="page-header">
     <div class="page-label">Management</div>
     <h1 class="page-title">Candidates</h1>
-    <p class="page-sub">Master list of all candidates. Add, edit, and view profiles.</p>
   </div>
 
-  <!-- ADD FORM -->
   <div class="add-panel">
     <div class="panel-title">Add Candidate</div>
     <div class="form-grid">
@@ -145,7 +117,7 @@
     </div>
     <div class="form-grid-2">
       <div class="field"><label>LinkedIn URL</label><input type="url" id="i-linkedin" placeholder="https://linkedin.com/in/..." /></div>
-      <div class="field"><label>Referred From</label><input type="text" id="i-referred" placeholder="Source / referral name" /></div>
+      <div class="field"><label>Referred From</label><input type="text" id="i-referred" placeholder="Source / referral" /></div>
     </div>
     <div class="field" style="margin-bottom:12px">
       <label>Recruiter</label>
@@ -156,7 +128,6 @@
     </div>
   </div>
 
-  <!-- TABLE -->
   <div class="table-panel">
     <div class="table-head">
       <h3>All Candidates</h3>
@@ -169,27 +140,19 @@
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Company</th>
-            <th>Designation</th>
-            <th>Location</th>
-            <th>Recruiter</th>
-            <th>LinkedIn</th>
-            <th>Referred From</th>
-            <th>Actions</th>
+            <th>Name</th><th>Phone</th><th>Email</th><th>Company</th>
+            <th>Designation</th><th>Location</th><th>Recruiter</th>
+            <th>LinkedIn</th><th>Referred From</th><th>Actions</th>
           </tr>
         </thead>
         <tbody id="table-body">
-          <tr><td colspan="9"><div class="empty-state"><p>Loading...</p></div></td></tr>
+          <tr><td colspan="10"><div class="empty-state">Loading...</div></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
 
-<!-- EDIT MODAL -->
 <div class="modal-overlay" id="edit-modal">
   <div class="modal">
     <h3>Edit Candidate</h3>
@@ -207,12 +170,9 @@
       <div class="field"><label>LinkedIn URL</label><input type="url" id="e-linkedin" /></div>
       <div class="field"><label>Referred From</label><input type="text" id="e-referred" /></div>
     </div>
-    <div class="field">
-      <label>Recruiter</label>
-      <select id="e-recruiter"><option value="">— Select Recruiter —</option></select>
-    </div>
+    <div class="field"><label>Recruiter</label><select id="e-recruiter"><option value="">— Select —</option></select></div>
     <div class="modal-actions">
-      <button class="btn btn-edit" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="closeModal()">Cancel</button>
       <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
     </div>
   </div>
@@ -234,10 +194,7 @@
 
   async function load() {
     try {
-      const [cRes, rRes] = await Promise.all([
-        fetch(`${API}/candidates`),
-        fetch(`${API}/recruiters`)
-      ]);
+      const [cRes, rRes] = await Promise.all([fetch(`${API}/candidates`), fetch(`${API}/recruiters`)]);
       candidates = await cRes.json();
       recruiters = await rRes.json();
       populateRecruiters();
@@ -254,36 +211,30 @@
   function render(data) {
     const tbody = document.getElementById('table-body');
     document.getElementById('count').textContent = `${data.length} candidate${data.length===1?'':'s'}`;
-    if (!data.length) {
-      tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><p>No candidates yet — add one above.</p></div></td></tr>`;
-      return;
-    }
+    if (!data.length) { tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state">No candidates yet — add one above.</div></td></tr>`; return; }
     tbody.innerHTML = data.map(c => `
       <tr>
         <td><strong>${c.name}</strong></td>
-        <td class="td-mono">${c.phone || '—'}</td>
-        <td class="td-mono">${c.email || '—'}</td>
-        <td>${c.currentcompany || '—'}</td>
-        <td style="color:var(--muted)">${c.designation || '—'}</td>
-        <td style="color:var(--muted)">${c.location || '—'}</td>
-        <td style="color:var(--muted)">${c.recruitername || '—'}</td>
-        <td>${c.linkedinlink ? `<a class="td-link" href="${c.linkedinlink.startsWith('http') ? c.linkedinlink : 'https://' + c.linkedinlink}" target="_blank" rel="noopener noreferrer">View ↗</a>` : '—'}</td>
-        <td style="color:var(--muted)">${c.referredfrom || '—'}</td>
+        <td class="td-mono">${c.phone||'—'}</td>
+        <td class="td-mono">${c.email||'—'}</td>
+        <td>${c.currentcompany||'—'}</td>
+        <td style="color:var(--muted)">${c.designation||'—'}</td>
+        <td style="color:var(--muted)">${c.location||'—'}</td>
+        <td style="color:var(--muted)">${c.recruitername||'—'}</td>
+        <td>${c.linkedinlink?`<a class="td-link" href="${c.linkedinlink.startsWith('http')?c.linkedinlink:'https://'+c.linkedinlink}" target="_blank" rel="noopener">View ↗</a>`:'—'}</td>
+        <td style="color:var(--muted)">${c.referredfrom||'—'}</td>
         <td><div class="actions">
-          <button class="btn btn-edit btn-sm" onclick="openEdit(${c.candidateid})">Edit</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteCandidate(${c.candidateid})">Del</button>
+          <button class="btn btn-sm" onclick="openEdit(${c.candidateid})">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteCandidate(${c.candidateid})">Del</button>
         </div></td>
-      </tr>
-    `).join('');
+      </tr>`).join('');
   }
 
   function filterTable() {
     const q = document.getElementById('search').value.toLowerCase();
     render(candidates.filter(c =>
-      (c.name||'').toLowerCase().includes(q) ||
-      (c.email||'').toLowerCase().includes(q) ||
-      (c.currentcompany||'').toLowerCase().includes(q) ||
-      (c.location||'').toLowerCase().includes(q) ||
+      (c.name||'').toLowerCase().includes(q) || (c.email||'').toLowerCase().includes(q) ||
+      (c.currentcompany||'').toLowerCase().includes(q) || (c.location||'').toLowerCase().includes(q) ||
       (c.designation||'').toLowerCase().includes(q)
     ));
   }
@@ -294,83 +245,69 @@
     if (!name) return showToast('Name is required', 'error');
     if (!phone) return showToast('Phone is required', 'error');
     const rid = document.getElementById('i-recruiter').value;
-    const body = {
-      name, phone,
-      email: document.getElementById('i-email').value.trim() || null,
-      currentCompany: document.getElementById('i-company').value.trim() || null,
-      designation: document.getElementById('i-designation').value.trim() || null,
-      location: document.getElementById('i-location').value.trim() || null,
-      linkedinLink: document.getElementById('i-linkedin').value.trim() || null,
-      referredFrom: document.getElementById('i-referred').value.trim() || null,
-      recruiterId: rid ? parseInt(rid) : null,
+    const body = { name, phone,
+      email: document.getElementById('i-email').value.trim()||null,
+      currentCompany: document.getElementById('i-company').value.trim()||null,
+      designation: document.getElementById('i-designation').value.trim()||null,
+      location: document.getElementById('i-location').value.trim()||null,
+      linkedinLink: document.getElementById('i-linkedin').value.trim()||null,
+      referredFrom: document.getElementById('i-referred').value.trim()||null,
+      recruiterId: rid?parseInt(rid):null,
     };
     try {
-      const res = await fetch(`${API}/candidates`, {
-        method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
-      });
+      const res = await fetch(`${API}/candidates`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
       if (!res.ok) { const e = await res.json(); throw new Error(e.error); }
-      ['i-name','i-phone','i-email','i-company','i-designation','i-location','i-linkedin','i-referred'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('i-recruiter').value = '';
-      showToast('Candidate added!', 'success');
-      load();
-    } catch(e) { showToast(e.message, 'error'); }
+      ['i-name','i-phone','i-email','i-company','i-designation','i-location','i-linkedin','i-referred'].forEach(id => document.getElementById(id).value='');
+      document.getElementById('i-recruiter').value='';
+      showToast('Candidate added!','success'); load();
+    } catch(e) { showToast(e.message,'error'); }
   }
 
   function openEdit(id) {
-    const c = candidates.find(x => x.candidateid === id);
-    if (!c) return;
+    const c = candidates.find(x => x.candidateid===id); if (!c) return;
     editingId = id;
-    document.getElementById('e-name').value = c.name || '';
-    document.getElementById('e-phone').value = c.phone || '';
-    document.getElementById('e-email').value = c.email || '';
-    document.getElementById('e-company').value = c.currentcompany || '';
-    document.getElementById('e-designation').value = c.designation || '';
-    document.getElementById('e-location').value = c.location || '';
-    document.getElementById('e-linkedin').value = c.linkedinlink || '';
-    document.getElementById('e-referred').value = c.referredfrom || '';
-    document.getElementById('e-recruiter').value = c.recruiterid || '';
+    document.getElementById('e-name').value = c.name||'';
+    document.getElementById('e-phone').value = c.phone||'';
+    document.getElementById('e-email').value = c.email||'';
+    document.getElementById('e-company').value = c.currentcompany||'';
+    document.getElementById('e-designation').value = c.designation||'';
+    document.getElementById('e-location').value = c.location||'';
+    document.getElementById('e-linkedin').value = c.linkedinlink||'';
+    document.getElementById('e-referred').value = c.referredfrom||'';
+    document.getElementById('e-recruiter').value = c.recruiterid||'';
     document.getElementById('edit-modal').classList.add('open');
   }
-  function closeModal() { document.getElementById('edit-modal').classList.remove('open'); editingId = null; }
+  function closeModal() { document.getElementById('edit-modal').classList.remove('open'); editingId=null; }
 
   async function saveEdit() {
     const erid = document.getElementById('e-recruiter').value;
     const body = {
       name: document.getElementById('e-name').value.trim(),
       phone: document.getElementById('e-phone').value.trim(),
-      email: document.getElementById('e-email').value.trim() || null,
-      currentCompany: document.getElementById('e-company').value.trim() || null,
-      designation: document.getElementById('e-designation').value.trim() || null,
-      location: document.getElementById('e-location').value.trim() || null,
-      linkedinLink: document.getElementById('e-linkedin').value.trim() || null,
-      referredFrom: document.getElementById('e-referred').value.trim() || null,
-      recruiterId: erid ? parseInt(erid) : null,
+      email: document.getElementById('e-email').value.trim()||null,
+      currentCompany: document.getElementById('e-company').value.trim()||null,
+      designation: document.getElementById('e-designation').value.trim()||null,
+      location: document.getElementById('e-location').value.trim()||null,
+      linkedinLink: document.getElementById('e-linkedin').value.trim()||null,
+      referredFrom: document.getElementById('e-referred').value.trim()||null,
+      recruiterId: erid?parseInt(erid):null,
     };
     try {
-      const res = await fetch(`${API}/candidates/${editingId}`, {
-        method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
-      });
+      const res = await fetch(`${API}/candidates/${editingId}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
       if (!res.ok) { const e = await res.json(); throw new Error(e.error); }
-      closeModal();
-      showToast('Candidate updated!', 'success');
-      load();
-    } catch(e) { showToast(e.message, 'error'); }
+      closeModal(); showToast('Candidate updated!','success'); load();
+    } catch(e) { showToast(e.message,'error'); }
   }
 
   async function deleteCandidate(id) {
-    if (!confirm('Delete this candidate? This cannot be undone.')) return;
-    try {
-      await fetch(`${API}/candidates/${id}`, { method: 'DELETE' });
-      showToast('Candidate deleted', 'success');
-      load();
-    } catch(e) { showToast(e.message, 'error'); }
+    if (!confirm('Delete this candidate?')) return;
+    try { await fetch(`${API}/candidates/${id}`,{method:'DELETE'}); showToast('Deleted','success'); load(); }
+    catch(e) { showToast(e.message,'error'); }
   }
 
-  function showToast(msg, type='success') {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = `toast ${type} show`;
-    setTimeout(() => t.classList.remove('show'), 3000);
+  function showToast(msg,type='success') {
+    const t=document.getElementById('toast'); t.textContent=msg; t.className=`toast ${type} show`;
+    setTimeout(()=>t.classList.remove('show'),3000);
   }
 
   load();
