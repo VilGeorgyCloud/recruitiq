@@ -230,6 +230,15 @@
   const collapsedRoles=new Set();
 
   const STATUS_ORDER=['Joined','Offer Accepted','Offer Extended','Offer Pending','R3 Cleared','R3 - Scheduled','R2 Cleared','R2 - Scheduled','R1 Cleared','R1 - Scheduled','Shortlisted','Action Required','Assignment','On Hold','R1 Feedback Pending','R2 Feedback Pending','Not Shortlisted','Screen Reject','R1 - Rejected','R2 - Rejected','R3 - Rejected','Duplicate','Withdrew'];
+  function statusPill(name) {
+    let color = '';
+    if (name === 'Joined') color = 'style="background:#edf9f4;border-color:#b6e8d4;color:#18a066"';
+    else if (name === 'Withdrew' || name === 'Duplicate' || name === 'Screen Reject') color = 'style="background:#fff0f0;border-color:#f5b8b8;color:#d94f4f"';
+    else if (['R1 - Rejected','R2 - Rejected','R3 - Rejected','Not Shortlisted'].includes(name)) color = 'style="background:#fff0f0;border-color:#f5b8b8;color:#d94f4f"';
+    else if (['Offer Accepted','Offer Extended','Offer Pending'].includes(name)) color = 'style="background:#fdf8ec;border-color:#f5d68a;color:#d4920a"';
+    else if (['R3 Cleared','R2 Cleared','R1 Cleared'].includes(name)) color = 'style="background:#f0f3ff;border-color:#c5d0fb;color:#4f6ef7"';
+    return `<span class="status-pill" ${color}>${name}</span>`;
+  }
   function statusSort(a,b){const ai=STATUS_ORDER.indexOf(a.statusname),bi=STATUS_ORDER.indexOf(b.statusname);return(ai===-1?99:ai)-(bi===-1?99:bi);}
 
   function switchTab(tab,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));el.classList.add('active');document.getElementById('panel-'+tab).classList.add('active');}
@@ -311,7 +320,7 @@
         roleEntries.forEach(e=>{
           html+=`<tr>
             <td><strong>${e.candidatename||'—'}</strong></td>
-            <td><span class="status-pill">${e.statusname||'—'}</span></td>
+            <td>${statusPill(e.statusname||'—')}</td>
             <td class="td-mono">${e.recruitername||'—'}</td>
             <td class="td-mono">${e.totalexperience!=null?e.totalexperience+'y':'—'}</td>
             <td class="td-mono">${e.ctc||'—'}</td>
