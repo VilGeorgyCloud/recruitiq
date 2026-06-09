@@ -24,7 +24,9 @@
   .hero { padding: 28px 0 20px; }
   .hero-label { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
   .hero-title { font-size: 20px; font-weight: 600; color: var(--text); letter-spacing: -0.3px; }
-  .stats-bar { display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 16px 0 24px; background: var(--surface); box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .stats-bar { display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: visible; margin: 16px 0 24px; background: var(--surface); box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .stat:first-child { border-radius: 10px 0 0 10px; }
+  .stat:last-child { border-radius: 0 10px 10px 0; }
   .stat { flex: 1; padding: 14px 20px; border-right: 1px solid var(--border); cursor: default; transition: background 0.15s; position: relative; }
   .stat:last-child { border-right: none; }
   .stat.clickable { cursor: pointer; }
