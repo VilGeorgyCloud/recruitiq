@@ -31,8 +31,9 @@
   .stat.clickable:hover { background: #f0f3ff; }
   .stat-val { font-family: var(--mono); font-size: 20px; color: var(--accent); font-weight: 500; }
   .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 400; }
-  .stat-dropdown { position: absolute; top: calc(100% + 4px); left: 0; min-width: 220px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); z-index: 50; display: none; overflow: hidden; }
+  .stat-dropdown { position: absolute; top: calc(100% + 2px); left: 0; min-width: 240px; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); z-index: 999; overflow: hidden; max-height: 320px; overflow-y: auto; }
   .stat-dropdown.open { display: block; }
+  .stat-dropdown { display: none; }
   .dropdown-item { padding: 10px 16px; font-size: 13px; cursor: pointer; transition: background 0.1s; border-bottom: 1px solid var(--border); }
   .dropdown-item:last-child { border-bottom: none; }
   .dropdown-item:hover { background: #f0f3ff; color: var(--accent); }
@@ -87,7 +88,7 @@
       <div class="stat-val" id="s-roles">—</div>
       <div class="stat-label">Open Roles</div>
     </div>
-    <div class="stat clickable" style="position:relative" onclick="toggleCompanyDropdown(event)">
+    <div class="stat clickable" id="companies-stat" style="position:relative">
       <div class="stat-val" id="s-companies">—</div>
       <div class="stat-label">Companies ▾</div>
       <div class="stat-dropdown" id="company-dropdown"></div>
@@ -131,29 +132,64 @@
 <footer><div class="footer-inner"><p>RecruitIQ · 10xDeveloper.tech</p><p>v0.2 · no auth</p></div></footer>
 <script>
   let companies = [];
+
   async function load() {
     try {
-      const [stats, cos] = await Promise.all([fetch('/api/stats').then(r=>r.json()), fetch('/api/companies').then(r=>r.json())]);
-      companies = cos;
+      const [stats, cos] = await Promise.all([
+        fetch('/api/stats').then(r=>r.json()),
+        fetch('/api/companies').then(r=>r.json()),
+      ]);
+      companies = cos.slice(0, 20);
       animateStat(document.getElementById('s-candidates'), stats.candidates);
       animateStat(document.getElementById('s-entries'), stats.entries);
       animateStat(document.getElementById('s-roles'), stats.roles);
       animateStat(document.getElementById('s-companies'), stats.companies);
       buildDropdown();
-    } catch(e) { ['s-candidates','s-entries','s-roles','s-companies'].forEach(id=>document.getElementById(id).textContent='—'); }
+    } catch(e) {
+      ['s-candidates','s-entries','s-roles','s-companies'].forEach(id => document.getElementById(id).textContent='—');
+    }
   }
+
   function animateStat(el, target) {
     let current=0; const step=Math.ceil(target/30)||1;
     const timer=setInterval(()=>{current=Math.min(current+step,target);el.textContent=current;if(current>=target)clearInterval(timer);},30);
   }
+
   function buildDropdown() {
-    const dd=document.getElementById('company-dropdown');
-    if(!companies.length){dd.innerHTML='<div class="dropdown-empty">No companies yet</div>';return;}
-    dd.innerHTML=companies.map(c=>`<div class="dropdown-item" onclick="goToCompany('${encodeURIComponent(c.name)}')">${c.name}</div>`).join('');
+    const dd = document.getElementById('company-dropdown');
+    if (!companies.length) {
+      dd.innerHTML = '<div class="dropdown-empty">No companies yet</div>';
+      return;
+    }
+    dd.innerHTML = companies.map(c =>
+      `<div class="dropdown-item" onclick="goToCompany(event, '${encodeURIComponent(c.name)}')">${c.name}</div>`
+    ).join('');
   }
-  function goToCompany(name){window.location.href=`candidate-entries.html?company=${name}`;}
-  function toggleCompanyDropdown(e){const dd=document.getElementById('company-dropdown');e.stopPropagation();dd.classList.toggle('open');}
-  document.addEventListener('click',()=>document.getElementById('company-dropdown')?.classList.remove('open'));
+
+  function goToCompany(e, name) {
+    e.stopPropagation();
+    window.location.href = `candidate-entries.html?company=${name}`;
+  }
+
+  // Setup click handler after DOM ready
+  document.addEventListener('DOMContentLoaded', () => {
+    const stat = document.getElementById('companies-stat');
+    const dd = document.getElementById('company-dropdown');
+
+    stat.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dd.classList.toggle('open');
+    });
+
+    document.addEventListener('click', () => {
+      dd.classList.remove('open');
+    });
+
+    dd.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  });
+
   load();
 </script>
 </body>
