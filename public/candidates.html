@@ -243,15 +243,17 @@
       const linkedinMatch = fullText.match(/(?:linkedin\.com\/in\/|linkedin\.com\/pub\/)([a-zA-Z0-9\-_%]+)/i);
       const linkedinLink = linkedinMatch ? 'https://linkedin.com/in/' + linkedinMatch[1] : null;
 
-      // Name — usually on first 2 lines, all caps or title case, no numbers
+      // Name — first title-cased 2-3 word line near the top
       const lines = fullText.split('\n').map(l => l.trim()).filter(l => l.length > 1);
       let name = null;
-      for (const line of lines.slice(0, 6)) {
-        const clean = line.replace(/[^a-zA-Z\s.]/g, '').trim();
-        const words = clean.split(/\s+/);
-        if (words.length >= 2 && words.length <= 5 && words.every(w => /^[A-Z]/.test(w) && w.length > 1)) {
-          name = clean; break;
-        }
+      for (const line of lines.slice(0, 10)) {
+        const clean = line.replace(/[^a-zA-Z\s.'-]/g, '').trim();
+        const words = clean.split(/\s+/).filter(w => w.length > 0);
+        if (
+          words.length >= 2 && words.length <= 3 &&
+          words.every(w => /^[A-Z][a-z]/.test(w)) &&
+          !/(resume|curriculum|vitae|profile|email|phone|address|contact|objective|summary)/i.test(clean)
+        ) { name = clean; break; }
       }
 
       // Current company — look for lines after keywords like "at", "working at", company names after role
