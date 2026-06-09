@@ -85,6 +85,10 @@
   .footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; }
   .footer-inner p { font-family: var(--mono); font-size: 10px; color: var(--muted); }
 
+  .btn-extract { background: var(--surface); color: var(--accent2); border-color: var(--accent2); }
+  .btn-extract:hover { background: #f3f0ff; }
+  .btn-extract.loading { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+
   @media(max-width:768px) { .form-grid,.form-grid-2{grid-template-columns:1fr} .wrapper{padding:0 16px} }
 </style>
 </head>
@@ -124,6 +128,8 @@
       <select id="i-recruiter"><option value="">— Select Recruiter —</option></select>
     </div>
     <div class="form-actions">
+      <input type="file" id="cv-file-input" accept=".pdf" style="display:none" onchange="extractFromCV()" />
+      <button class="btn btn-extract" onclick="document.getElementById('cv-file-input').click()" id="extract-btn">📄 Extract from CV</button>
       <button class="btn btn-primary" onclick="addCandidate()">+ Add Candidate</button>
     </div>
   </div>
@@ -191,6 +197,106 @@
   const API = '/api';
   let candidates = [], recruiters = [];
   let editingId = null;
+
+  async function extractFromCV() {
+    const file = document.getElementById('cv-file-input').files[0];
+    if (!file) return;
+    const btn = document.getElementById('extract-btn');
+    btn.textContent = '⏳ Reading...';
+    btn.classList.add('loading');
+
+    try {
+      // Load pdf.js from CDN
+      if (!window.pdfjsLib) {
+        await new Promise((res, rej) => {
+          const s = document.createElement('script');
+          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+          s.onload = res; s.onerror = rej;
+          document.head.appendChild(s);
+        });
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      }
+
+      // Read file as ArrayBuffer
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+      // Extract all text from all pages
+      let fullText = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        fullText += content.items.map(item => item.str).join(' ') + '\n';
+      }
+
+      // ── PARSE with regex ──────────────────────────────────────
+
+      // Email
+      const emailMatch = fullText.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
+      const email = emailMatch ? emailMatch[0] : null;
+
+      // Phone — matches common Indian and international formats
+      const phoneMatch = fullText.match(/(\+?\d[\d\s\-().]{8,15}\d)/);
+      const phone = phoneMatch ? phoneMatch[0].replace(/\s+/g,' ').trim() : null;
+
+      // LinkedIn
+      const linkedinMatch = fullText.match(/(?:linkedin\.com\/in\/|linkedin\.com\/pub\/)([a-zA-Z0-9\-_%]+)/i);
+      const linkedinLink = linkedinMatch ? 'https://linkedin.com/in/' + linkedinMatch[1] : null;
+
+      // Name — usually on first 2 lines, all caps or title case, no numbers
+      const lines = fullText.split('\n').map(l => l.trim()).filter(l => l.length > 1);
+      let name = null;
+      for (const line of lines.slice(0, 6)) {
+        const clean = line.replace(/[^a-zA-Z\s.]/g, '').trim();
+        const words = clean.split(/\s+/);
+        if (words.length >= 2 && words.length <= 5 && words.every(w => /^[A-Z]/.test(w) && w.length > 1)) {
+          name = clean; break;
+        }
+      }
+
+      // Current company — look for lines after keywords like "at", "working at", company names after role
+      const companyKeywords = /(?:currently\s+(?:working\s+)?(?:at|with|@)|present|current)\s*[:\-]?\s*(.+)/i;
+      const companyMatch = fullText.match(companyKeywords);
+      let currentCompany = companyMatch ? companyMatch[1].split(/[,\n|]/)[0].trim() : null;
+      if (currentCompany && currentCompany.length > 60) currentCompany = null;
+
+      // Designation — look for common job title keywords
+      const designationMatch = fullText.match(/(?:position|role|designation|title|job title)\s*[:\-]?\s*(.+)/i);
+      let designation = designationMatch ? designationMatch[1].split(/[,\n|]/)[0].trim() : null;
+      // Fallback: look for common title words in first 10 lines
+      if (!designation) {
+        const titleWords = /\b(engineer|developer|manager|analyst|designer|consultant|lead|senior|junior|intern|architect|director|officer|executive|specialist|associate)\b/i;
+        for (const line of lines.slice(0, 10)) {
+          if (titleWords.test(line) && line.length < 80) { designation = line.trim(); break; }
+        }
+      }
+      if (designation && designation.length > 80) designation = null;
+
+      // Location — look for city names or location keywords
+      const locationMatch = fullText.match(/(?:location|based in|residing in|city)\s*[:\-]?\s*(.+)/i);
+      let location = locationMatch ? locationMatch[1].split(/[,\n|]/)[0].trim() : null;
+      if (location && location.length > 60) location = null;
+
+      // Fill the form
+      if (name)           document.getElementById('i-name').value        = name;
+      if (phone)          document.getElementById('i-phone').value       = phone;
+      if (email)          document.getElementById('i-email').value       = email;
+      if (currentCompany) document.getElementById('i-company').value     = currentCompany;
+      if (designation)    document.getElementById('i-designation').value = designation;
+      if (location)       document.getElementById('i-location').value    = location;
+      if (linkedinLink)   document.getElementById('i-linkedin').value    = linkedinLink;
+
+      const filled = [name,phone,email,currentCompany,designation,location,linkedinLink].filter(Boolean).length;
+      showToast(`Extracted ${filled} field${filled===1?'':'s'} from CV!`, 'success');
+
+    } catch(e) {
+      showToast('Could not read PDF: ' + e.message, 'error');
+    } finally {
+      btn.textContent = '📄 Extract from CV';
+      btn.classList.remove('loading');
+      document.getElementById('cv-file-input').value = '';
+    }
+  }
 
   async function load() {
     try {
