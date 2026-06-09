@@ -31,9 +31,8 @@
   .stat.clickable:hover { background: #f0f3ff; }
   .stat-val { font-family: var(--mono); font-size: 20px; color: var(--accent); font-weight: 500; }
   .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 400; }
-  .stat-dropdown { position: absolute; top: calc(100% + 2px); left: 0; min-width: 240px; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); z-index: 999; overflow: hidden; max-height: 320px; overflow-y: auto; }
+  .stat-dropdown { display: none; position: absolute; top: calc(100% + 2px); left: 0; min-width: 240px; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); z-index: 999; overflow: hidden; max-height: 320px; overflow-y: auto; }
   .stat-dropdown.open { display: block; }
-  .stat-dropdown { display: none; }
   .dropdown-item { padding: 10px 16px; font-size: 13px; cursor: pointer; transition: background 0.1s; border-bottom: 1px solid var(--border); }
   .dropdown-item:last-child { border-bottom: none; }
   .dropdown-item:hover { background: #f0f3ff; color: var(--accent); }
@@ -171,24 +170,16 @@
     window.location.href = `candidate-entries.html?company=${name}`;
   }
 
-  // Setup click handler after DOM ready
-  document.addEventListener('DOMContentLoaded', () => {
-    const stat = document.getElementById('companies-stat');
-    const dd = document.getElementById('company-dropdown');
+  // attach after script runs (DOM already ready since script is at bottom)
+  const _stat = document.getElementById('companies-stat');
+  const _dd   = document.getElementById('company-dropdown');
 
-    stat.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dd.classList.toggle('open');
-    });
-
-    document.addEventListener('click', () => {
-      dd.classList.remove('open');
-    });
-
-    dd.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
+  _stat.addEventListener('click', (e) => {
+    e.stopPropagation();
+    _dd.classList.toggle('open');
   });
+
+  document.addEventListener('click', () => _dd.classList.remove('open'));
 
   load();
 </script>
