@@ -12,13 +12,16 @@ const app = express();
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
+app.set('trust proxy', 1);
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'recruitiq-dev-secret-change-me',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: true,
     httpOnly: true,
+    sameSite: 'lax',
     maxAge: null, // session cookie — expires when browser closes (per requirement: no persistence)
   },
 }));
